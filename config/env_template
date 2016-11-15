@@ -1,3 +1,4 @@
 # To get your own token: https://github.com/reddit/reddit/wiki/OAuth2
 REDDIT_CLIENT_ID='The Client ID generated during app registration'
 REDDIT_SECRET='put your secret here'
+REDDIT_ACCESS_TOKEN='add access token'
