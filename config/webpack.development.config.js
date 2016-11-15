@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const DotenvPlugin = require('webpack-dotenv-plugin');
 const PATHS = require('./paths');
 
 module.exports = {
@@ -27,7 +28,11 @@ module.exports = {
       jQuery: 'jquery'
     }),
     new ExtractTextPlugin('styles.css'),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new DotenvPlugin({
+      sample: './config/env_template',
+      path: './.env'
+    })
   ],
   module: {
     loaders: [
