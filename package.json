@@ -37,7 +37,9 @@
     "redux-thunk": "^2.1.0",
     "semantic-ui": "^2.2.6",
     "semantic-ui-react": "^0.60.4",
-    "webpack": "^1.13.3"
+    "snoowrap": "^1.11.2",
+    "webpack": "^1.13.3",
+    "webpack-dotenv-plugin": "^1.4.0"
   },
   "private": true,
   "config": {
