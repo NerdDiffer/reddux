@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Segment } from 'semantic-ui-react';
 import Nav from './Nav';
 
-const App = () => (
+const App = (props) => (
   <Container
     className="app"
     textAlign="center"
@@ -11,6 +11,7 @@ const App = () => (
     <Segment>
       <Nav />
       <h1>Reddit Reader</h1>
+      {props.children}
     </Segment>
   </Container>
 );
