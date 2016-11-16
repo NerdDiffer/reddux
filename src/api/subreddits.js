@@ -6,7 +6,8 @@ const getSubreddits = (url, client) => {
 
   return client.get(url, { headers })
     .then(res => {
-      return res;
+      console.log(res);
+      return res.data.data;
     })
     .catch(err => {
       showError(err);

@@ -20,13 +20,13 @@ class Subreddits extends Component {
     super(props);
 
     this.state = {
-      collection: [],
-      isFetching: false,
-      currentSelection: null
+      subscribedTo: [],
+      selectedCollection: [],
+      nameOfSelectedCollection: null,
+      isFetching: false
     };
 
     this.renderChildren = this.renderChildren.bind(this);
-    this._handleResponse = this._handleResponse.bind(this);
     this.handleGetMySubreddits = this.handleGetMySubreddits.bind(this);
     this.handleGetPopularSubreddits = this.handleGetPopularSubreddits.bind(this);
   }
@@ -35,23 +35,19 @@ class Subreddits extends Component {
     this.handleGetMySubreddits();
   }
 
-  _handleResponse(res, name) {
-    console.log(res);
-    const { children } = res.data.data;
-
-    this.setState({
-      collection: children,
-      isFetching: false
-    });
-  }
-
   handleGetMySubreddits() {
     this.setState({ isFetching: true });
 
     getMySubreddits(apiClient)
-      .then(res => {
-        this._handleResponse(res);
-        this.setState({ currentSelection: 'My' })
+      .then(data => {
+        const { children } = data;
+
+        this.setState({
+          subscribedTo: children,
+          selectedCollection: children,
+          nameOfSelectedCollection: 'My',
+          isFetching: false
+        });
       });
   }
 
@@ -59,30 +55,42 @@ class Subreddits extends Component {
     this.setState({ isFetching: true });
 
     getPopularSubreddits(apiClient)
-      .then(res => {
-        this._handleResponse(res);
-        this.setState({ currentSelection: 'Popular' })
+      .then(data => {
+        const { children } = data;
+
+        this.setState({
+          selectedCollection: children,
+          nameOfSelectedCollection: 'Popular',
+          isFetching: false
+        });
       });
   }
 
   renderHeader() {
-    const { currentSelection } = this.state;
-    return (currentSelection ? <h3>{`${currentSelection} Subreddits`}</h3> : null);
+    const { nameOfSelectedCollection } = this.state;
+
+    return (
+      nameOfSelectedCollection ?
+        <h3>{`${nameOfSelectedCollection} Subreddits`}</h3> :
+        null
+    );
   }
 
   renderChildren() {
-    const { collection } = this.state;
-    if (!collection) { return null; }
+    const { selectedCollection } = this.state;
 
-    return collection.map(({ data }, ind) => {
-      const { title, url } = data;
-
-      return <Subreddit key={ind} title={title} url={url} />;
-    });
+    if (!selectedCollection) {
+      return null;
+    } else {
+      return selectedCollection.map(({ data }, ind) => {
+        const { title, url } = data;
+        return <Subreddit key={ind} title={title} url={url} />;
+      });
+    }
   }
 
   render() {
-    const { isFetching, currentSelection } = this.state;
+    const { isFetching } = this.state;
 
     return(
       <div className="subreddits">
