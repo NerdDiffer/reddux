@@ -1,5 +1,5 @@
 // get the front page
-import { setAuthorizationHeader } from './config';
+import { setAuthorizationHeader, showError } from './_shared';
 
 export default client => {
   const url = 'https://oauth.reddit.com/.json';
@@ -10,17 +10,6 @@ export default client => {
       return res;
     })
     .catch(err => {
-      console.log(err);
-
-      if (err.response) {
-        const { status, headers, data } = err.response;
-        console.log(status);
-        console.log(headers);
-        console.log(data);
-      } else {
-        console.log(err.message);
-      }
-
-      console.log(err.config);
+      showError(err)
     });
 };

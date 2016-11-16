@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { authUrl } from '../../api/config';
+import { authUrl } from '../../api';
 
 const Authorize = () => (
   <div className="auth link">

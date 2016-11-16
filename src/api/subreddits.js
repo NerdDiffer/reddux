@@ -1,5 +1,5 @@
 // Get the user subreddits
-import { setAuthorizationHeader } from './config';
+import { setAuthorizationHeader, showError } from './_shared';
 
 export const getMySubreddits = client => {
   const url = '/subreddits/mine/subscriber';
@@ -10,17 +10,8 @@ export const getMySubreddits = client => {
       return res;
     })
     .catch(err => {
-      console.log(err);
-
-      if (err.response) {
-        const { status, headers, data } = err.response;
-        console.log(status);
-        console.log(headers);
-        console.log(data);
-      } else {
-        console.log(err.message);
-      }
-
-      console.log(err.config);
+      showError(err);
     });
 };
+
+// TODO: send request for url: '/subreddits/popular'

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { showError } from './_shared';
 
 const accessToken = (client, code) => {
   const url = '/api/v1/access_token';
@@ -23,17 +24,7 @@ const accessToken = (client, code) => {
       console.log(res);
     })
     .catch(err => {
-      console.log(err);
-
-      if (err.response) {
-        const { status, headers, data } = err.response;
-        console.log(status);
-        console.log(headers);
-        console.log(data);
-      } else {
-        console.log(err.message);
-      }
-      console.log(err.config);
+      showError(err);
     });
 };
 
