@@ -7,7 +7,7 @@ export default client => {
 
   return client.get(url, { headers })
     .then(res => {
-      console.log(res);
+      return res;
     })
     .catch(err => {
       console.log(err);
