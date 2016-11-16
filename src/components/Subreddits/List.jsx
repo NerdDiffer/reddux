@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Item, Icon } from 'semantic-ui-react';
-import apiClient, {
-  subreddits as getSubreddits
-} from '../../api';
+import apiClient, { subreddits } from '../../api';
+
+const { getMySubreddits } = subreddits;
 
 const Subreddit = (props) => {
   const { url, title } = props;
@@ -27,7 +27,7 @@ class Subreddits extends Component {
   }
 
   componentDidMount() {
-    getSubreddits(apiClient)
+    getMySubreddits(apiClient)
       .then(res => {
         console.log(res);
         const { children } = res.data.data;

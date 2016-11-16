@@ -1,7 +1,7 @@
 // Get the user subreddits
 import { setAuthorizationHeader } from './config';
 
-export default client => {
+export const getMySubreddits = client => {
   const url = '/subreddits/mine/subscriber';
   const headers = setAuthorizationHeader();
 
