@@ -1,8 +1,19 @@
 import React, { Component } from 'react';
+import { Item, Icon } from 'semantic-ui-react';
 import apiClient, {
   subreddits as getSubreddits
-} from '../api';
-import Subreddit from './Subreddit';
+} from '../../api';
+
+const Subreddit = (props) => {
+  const { url, title } = props;
+
+  return (
+    <Item>
+      <Item.Header as="a">{title}</Item.Header>
+      <Item.Meta>{url}</Item.Meta>
+    </Item>
+  );
+};
 
 class Subreddits extends Component {
   constructor(props) {
