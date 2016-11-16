@@ -1,19 +1,9 @@
 import React, { Component } from 'react';
-import { Item, Icon, Button } from 'semantic-ui-react';
+import { Icon, Button } from 'semantic-ui-react';
 import apiClient, { subreddits } from '../../api';
+import Subreddit from './Subreddit';
 
-const { getMySubreddits, getPopularSubreddits } = subreddits;
-
-const Subreddit = (props) => {
-  const { url, title } = props;
-
-  return (
-    <Item>
-      <Item.Header as="a">{title}</Item.Header>
-      <Item.Meta>{url}</Item.Meta>
-    </Item>
-  );
-};
+const { getMySubreddits, getPopularSubreddits, postToSubscription } = subreddits;
 
 class Subreddits extends Component {
   constructor(props) {
@@ -29,10 +19,13 @@ class Subreddits extends Component {
     this.renderChildren = this.renderChildren.bind(this);
     this.handleGetMySubreddits = this.handleGetMySubreddits.bind(this);
     this.handleGetPopularSubreddits = this.handleGetPopularSubreddits.bind(this);
+    this.handleSubscription = this.handleSubscription.bind(this);
+    this.handleSubscribe = this.handleSubscription.bind(this, 'sub');
+    this.handleUnsubscribe = this.handleSubscription.bind(this, 'unsub');
   }
 
   componentDidMount() {
-    this.handleGetMySubreddits();
+    // this.handleGetMySubreddits();
   }
 
   handleGetMySubreddits() {
@@ -41,9 +34,18 @@ class Subreddits extends Component {
     getMySubreddits(apiClient)
       .then(data => {
         const { children } = data;
+        console.log(children);
+
+        // store an object of subreddit subscriptions, indexed by their url
+        const subscribedTo = children.reduce((obj, { data }) => {
+          const { url, name } =  data;
+          obj[url] = name;
+
+          return obj;
+        }, {});
 
         this.setState({
-          subscribedTo: children,
+          subscribedTo,
           selectedCollection: children,
           nameOfSelectedCollection: 'My',
           isFetching: false
@@ -66,6 +68,12 @@ class Subreddits extends Component {
       });
   }
 
+  handleSubscription(action, subredditName) {
+    console.log(action, subredditName);
+    const params = { action, sr_name: subredditName };
+    postToSubscription(apiClient, params);
+  }
+
   renderHeader() {
     const { nameOfSelectedCollection } = this.state;
 
@@ -77,14 +85,29 @@ class Subreddits extends Component {
   }
 
   renderChildren() {
-    const { selectedCollection } = this.state;
+    const { selectedCollection, subscribedTo } = this.state;
 
     if (!selectedCollection) {
       return null;
     } else {
       return selectedCollection.map(({ data }, ind) => {
-        const { title, url } = data;
-        return <Subreddit key={ind} title={title} url={url} />;
+        const { title, url, name } = data;
+        const isSubscribed = subscribedTo.hasOwnProperty(url);
+
+        const handleSubscription = isSubscribed ?
+          () => this.handleUnsubscribe(name) :
+          () => this.handleSubscribe(name);
+
+        return (
+          <Subreddit
+            key={ind}
+            title={title}
+            url={url}
+            name={name}
+            isSubscribed={isSubscribed}
+            handleSubscription={handleSubscription}
+          />
+        );
       });
     }
   }
