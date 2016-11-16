@@ -15,9 +15,14 @@ class FrontPage extends Component {
     };
 
     this.renderChildren = this.renderChildren.bind(this);
+    this.handleGetFrontPage = this.handleGetFrontPage.bind(this);
   }
 
   componentDidMount() {
+    this.handleGetFrontPage();
+  }
+
+  handleGetFrontPage() {
     this.setState({ isFetching: true });
 
     getFrontPage(apiClient)
@@ -29,7 +34,8 @@ class FrontPage extends Component {
           posts: children,
           isFetching: false
         });
-      });
+      })
+      .catch(err => err);
   }
 
   renderChildren() {
