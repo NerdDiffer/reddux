@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Item, Icon } from 'semantic-ui-react';
+import { Item, Icon, Button } from 'semantic-ui-react';
 import apiClient, { subreddits } from '../../api';
 
-const { getMySubreddits } = subreddits;
+const { getMySubreddits, getPopularSubreddits } = subreddits;
 
 const Subreddit = (props) => {
   const { url, title } = props;
@@ -20,20 +20,54 @@ class Subreddits extends Component {
     super(props);
 
     this.state = {
-      collection: []
+      collection: [],
+      isFetching: false,
+      currentSelection: null
     };
 
     this.renderChildren = this.renderChildren.bind(this);
+    this._handleResponse = this._handleResponse.bind(this);
+    this.handleGetMySubreddits = this.handleGetMySubreddits.bind(this);
+    this.handleGetPopularSubreddits = this.handleGetPopularSubreddits.bind(this);
   }
 
   componentDidMount() {
+    this.handleGetMySubreddits();
+  }
+
+  _handleResponse(res, name) {
+    console.log(res);
+    const { children } = res.data.data;
+
+    this.setState({
+      collection: children,
+      isFetching: false
+    });
+  }
+
+  handleGetMySubreddits() {
+    this.setState({ isFetching: true });
+
     getMySubreddits(apiClient)
       .then(res => {
-        console.log(res);
-        const { children } = res.data.data;
-
-        this.setState({ collection: children });
+        this._handleResponse(res);
+        this.setState({ currentSelection: 'My' })
       });
+  }
+
+  handleGetPopularSubreddits() {
+    this.setState({ isFetching: true });
+
+    getPopularSubreddits(apiClient)
+      .then(res => {
+        this._handleResponse(res);
+        this.setState({ currentSelection: 'Popular' })
+      });
+  }
+
+  renderHeader() {
+    const { currentSelection } = this.state;
+    return (currentSelection ? <h3>{`${currentSelection} Subreddits`}</h3> : null);
   }
 
   renderChildren() {
@@ -48,9 +82,21 @@ class Subreddits extends Component {
   }
 
   render() {
+    const { isFetching, currentSelection } = this.state;
+
     return(
       <div className="subreddits">
-        <h2>My Subreddits</h2>
+        <h2>Subreddits</h2>
+        <Button content="getMySubreddits" onClick={this.handleGetMySubreddits} />
+        <Button content="getPopularSubreddits" onClick={this.handleGetPopularSubreddits} />
+        <br />
+        <Icon
+          name="refresh"
+          size="large"
+          color="black"
+          loading={isFetching}
+        />
+        {this.renderHeader()}
         {this.renderChildren()}
       </div>
     );
