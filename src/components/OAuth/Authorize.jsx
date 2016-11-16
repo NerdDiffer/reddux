@@ -1,18 +1,10 @@
 import React, { Component } from 'react';
-import { buildAuthUrl } from '../../api';
+import { authUrl } from '../../api/config';
 
-class Authorize extends Component {
-  componentWillMount() {
-    console.log(buildAuthUrl());
-  }
-
-  render() {
-    return(
-      <div className="auth link">
-        <a href={buildAuthUrl()}>Authorize Reddit</a>
-      </div>
-    );
-  }
-}
+const Authorize = () => (
+  <div className="auth link">
+    <a href={authUrl}>Authorize Reddit</a>
+  </div>
+);
 
 export default Authorize;
