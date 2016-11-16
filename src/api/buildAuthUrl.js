@@ -8,7 +8,7 @@ const buildAuthUrl = () => {
     state: 'RANDOM_STRING',
     redirect_uri: 'http://localhost:8080/oauth/callback',
     duration: 'temporary',
-    scope: 'identity mysubreddits read'
+    scope: 'identity mysubreddits read subscribe'
   };
   const stringifiedParams = stringify(params);
   return `${baseUrl}?${stringifiedParams}`;
