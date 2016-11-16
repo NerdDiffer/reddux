@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Icon } from 'semantic-ui-react';
 import apiClient, {
   getFrontPage
 } from '../api';
@@ -9,19 +10,25 @@ class FrontPage extends Component {
     super(props);
 
     this.state = {
-      posts: []
+      posts: [],
+      isFetching: false,
     };
 
     this.renderChildren = this.renderChildren.bind(this);
   }
 
   componentDidMount() {
+    this.setState({ isFetching: true });
+
     getFrontPage(apiClient)
       .then(res => {
         console.log(res);
         const { children } = res.data.data;
 
-        this.setState({ posts: children });
+        this.setState({
+          posts: children,
+          isFetching: false
+        });
       });
   }
 
@@ -40,6 +47,13 @@ class FrontPage extends Component {
     return(
       <div className="subreddits">
         <h2>FrontPage</h2>
+        <Icon
+          name="refresh"
+          size="large"
+          color="black"
+          loading={this.state.isFetching}
+        />
+        <br />
         {this.renderChildren()}
       </div>
     );
