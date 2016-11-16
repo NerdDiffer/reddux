@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import apiClient, {
-  authorize
-} from '../api';
+import { buildAuthUrl } from '../../api';
 
 class Authorize extends Component {
   componentWillMount() {
-    authorize(apiClient);
+    console.log(buildAuthUrl());
   }
 
   render() {
     return(
-      <div className="clientTest">
+      <div className="auth link">
+        <a href={buildAuthUrl()}>Authorize Reddit</a>
       </div>
     );
   }
