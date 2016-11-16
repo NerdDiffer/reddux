@@ -1,6 +1,7 @@
 import Axios from 'axios';
 import subreddits from './subreddits';
 import buildAuthUrl from './buildAuthUrl';
+import getFrontPage from './frontPage';
 import accessToken from './accessToken';
 
 const client = Axios.create({
@@ -8,4 +9,4 @@ const client = Axios.create({
 });
 
 export default client;
-export { subreddits, buildAuthUrl, accessToken };
+export { subreddits, buildAuthUrl, accessToken, getFrontPage };

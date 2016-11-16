@@ -21,6 +21,14 @@ class Nav extends Component {
     return ([
       <Menu.Item
         as={Link}
+        to="/front_page"
+        name="front_page"
+        key="3"
+        active={activeItem === 'front_page'}
+        onClick={this.handleItemClick}
+      />,
+      <Menu.Item
+        as={Link}
         to="/authorize"
         name="authorize"
         key="1"

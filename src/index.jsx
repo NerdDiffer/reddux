@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import { Router, Route, browserHistory } from 'react-router';
 
 import App from './components/App';
+import FrontPage from './components/FrontPage';
 import Subreddits from './components/Subreddits';
 import Authorize from './components/OAuth/Authorize';
 import OAuthCallback from './components/OAuth/Callback';
@@ -13,6 +14,7 @@ const routes = (
     <Route path="/subreddits" component={Subreddits} />
     <Route path="/authorize" component={Authorize} />
     <Route path="/oauth/callback" component={OAuthCallback} />
+    <Route path="/front_page" component={FrontPage} />
   </Route>
 );
 
