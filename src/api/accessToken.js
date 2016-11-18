@@ -9,7 +9,7 @@ const postForToken = (client, params) => {
       username: process.env.REDDIT_CLIENT_ID,
       password: process.env.REDDIT_SECRET,
     },
-    'Content-Type': 'application/x-www-form-urlencoded',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     baseURL: 'https://www.reddit.com/'
   };
 
