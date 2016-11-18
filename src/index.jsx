@@ -12,7 +12,7 @@ import OAuthCallback from './components/OAuth/Callback';
 const routes = (
   <Route path="/" component={App}>
     <Route path="/subreddits" component={SubredditsList} />
-    <Route path="/authorize" component={Authorize} />
+    <Route path="/oauth" component={Authorize} />
     <Route path="/oauth/callback" component={OAuthCallback} />
     <Route path="/front_page" component={FrontPage} />
   </Route>
