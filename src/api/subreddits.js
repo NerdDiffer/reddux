@@ -1,8 +1,8 @@
 // Get the user subreddits
-import { setAuthorizationHeader, showError } from './_shared';
+import { generateBearerHeader, showError } from './_shared';
 
 const getSubreddits = (url, client) => {
-  const headers = setAuthorizationHeader();
+  const headers = generateBearerHeader();
 
   return client.get(url, { headers })
     .then(res => {
@@ -21,7 +21,7 @@ export const getPopularSubreddits = getSubreddits.bind(null, '/subreddits/popula
 export const postToSubscription = (client, params) => {
   const url = '/api/subscribe';
 
-  const headers = setAuthorizationHeader();
+  const headers = generateBearerHeader();
   headers['Content-Type'] = 'application/x-www-form-urlencoded';
 
   return client.post(url, params, { headers })
