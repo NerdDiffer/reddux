@@ -7,7 +7,7 @@ import apiClient, {
 class OAuthCallback extends Component {
   componentDidMount() {
     const code = this.props.location.query.code;
-    accessToken(apiClient, code);
+    accessToken.retrieve(apiClient, code);
   }
 
   render() {
