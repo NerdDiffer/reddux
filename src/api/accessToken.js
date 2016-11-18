@@ -1,22 +1,24 @@
-import axios from 'axios';
-import { showError } from './_shared';
+import { generateBasicHeader, showError } from './_shared';
 
 const postForToken = (client, params) => {
-  const url = '/api/v1/access_token';
+  const url = 'https://www.reddit.com/api/v1/access_token';
+
+  const { REDDIT_CLIENT_ID: username, REDDIT_SECRET: password } = process.env;
 
   const config = {
-    auth: {
-      username: process.env.REDDIT_CLIENT_ID,
-      password: process.env.REDDIT_SECRET,
+    method: 'POST',
+    body: params,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      ...generateBasicHeader(username, password)
     },
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    baseURL: 'https://www.reddit.com/'
-  };
+    cache: 'no-cache'
+  },
 
-  return client.post(url, params, config)
+  return fetch(url, config)
     .then(res => {
       console.log(res);
-      return res;
+      return res.json()
     })
     .catch(err => {
       showError(err);
