@@ -3,7 +3,7 @@ import { stringify } from 'querystring';
 
 import * as subreddits from './subreddits';
 import getFrontPage from './frontPage';
-import accessToken from './accessToken';
+import * as accessToken from './accessToken';
 
 const client = Axios.create({
   baseURL: 'https://oauth.reddit.com'
