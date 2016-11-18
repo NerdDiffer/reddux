@@ -1,13 +1,8 @@
-import Axios from 'axios';
 import { stringify } from 'querystring';
 
 import * as subreddits from './subreddits';
 import getFrontPage from './frontPage';
 import * as accessToken from './accessToken';
-
-const client = Axios.create({
-  baseURL: 'https://oauth.reddit.com'
-});
 
 // https://github.com/reddit/reddit/wiki/OAuth2#authorization
 const authUrl = (() => {
@@ -24,5 +19,4 @@ const authUrl = (() => {
   return `${baseUrl}?${stringifiedParams}`;
 })();
 
-export default client;
 export { authUrl, subreddits, accessToken, getFrontPage };
