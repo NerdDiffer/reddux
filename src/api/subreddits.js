@@ -22,12 +22,9 @@ export const postToSubscription = (client, params) => {
   const url = '/api/subscribe';
 
   const headers = setAuthorizationHeader();
-  const config = {
-    // baseURL: 'https://www.reddit.com/',
-    'Content-Type': 'application/x-www-form-urlencoded'
-  };
+  headers['Content-Type'] = 'application/x-www-form-urlencoded';
 
-  return client.post(url, params, { headers, ...config })
+  return client.post(url, params, { headers })
     .then(res => {
       console.log(res);
       return res.data.data;
