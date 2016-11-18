@@ -33,3 +33,16 @@ export const retrieve = (client, code) => {
 
   return postForToken.call(null, client, params);
 };
+
+// https://github.com/reddit/reddit/wiki/OAuth2#refreshing-the-token
+export const refresh = (client, refresh_token) => {
+  const params = {
+    grant_type: 'refresh_token',
+    refresh_token
+  };
+
+  return postForToken.call(null, client, params);
+};
+
+// TODO: add code for revoking token (ie: when user logs out)
+// https://github.com/reddit/reddit/wiki/OAuth2#manually-revoking-a-token
