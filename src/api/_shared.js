@@ -4,6 +4,13 @@ export const generateBearerHeader = () => {
   return { 'Authorization': authValue };
 };
 
+export const generateBasicHeader = (username, password) => {
+  const str = `${username}:${password}`;
+  const encoded = window.btoa(str); // base-64 encoding
+  const authValue = `Basic ${encoded}`;
+  return { 'Authorization': authValue };
+};
+
 export const showError = err => {
   console.log(err);
   console.log(err.config);
