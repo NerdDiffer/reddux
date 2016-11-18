@@ -9,6 +9,7 @@ const client = Axios.create({
   baseURL: 'https://oauth.reddit.com'
 });
 
+// https://github.com/reddit/reddit/wiki/OAuth2#authorization
 const authUrl = (() => {
   const baseUrl = 'https://www.reddit.com/api/v1/authorize';
   const params = {
@@ -16,7 +17,7 @@ const authUrl = (() => {
     response_type: 'code',
     state: 'RANDOM_STRING',
     redirect_uri: 'http://localhost:8080/oauth/callback',
-    duration: 'temporary',
+    duration: 'permanent',
     scope: 'identity mysubreddits read subscribe'
   };
   const stringifiedParams = stringify(params);
