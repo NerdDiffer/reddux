@@ -18,32 +18,22 @@ class Nav extends Component {
   }
 
   renderItems(activeItem) {
-    return ([
+    const menuItems = [
+      { name: 'front_page' },
+      { name: 'oauth' },
+      { name: 'subreddits' }
+    ];
+
+    return menuItems.map(({ name }, ind) => (
       <Menu.Item
         as={Link}
-        to="/front_page"
-        name="front_page"
-        key="3"
-        active={activeItem === 'front_page'}
-        onClick={this.handleItemClick}
-      />,
-      <Menu.Item
-        as={Link}
-        to="/authorize"
-        name="authorize"
-        key="1"
-        active={activeItem === 'authorize'}
-        onClick={this.handleItemClick}
-      />,
-      <Menu.Item
-        as={Link}
-        to="/subreddits"
-        name="subreddits"
-        key="2"
-        active={activeItem === 'subreddits'}
+        to={`/${name}`}
+        name={name}
+        key={ind}
+        active={activeItem === name}
         onClick={this.handleItemClick}
       />
-    ]);
+    ));
   };
 
   render() {
