@@ -6,7 +6,9 @@ const baseUrl = 'https://oauth.reddit.com';
 const getSubreddits = endpoint => {
   const url = `${baseUrl}/${endpoint}`;
   const config = {
-    'Authorization': buildAuthorizationHeader('bearer')
+    headers: {
+      'Authorization': buildAuthorizationHeader('bearer')
+    }
   };
 
   return fetch(url, config)
