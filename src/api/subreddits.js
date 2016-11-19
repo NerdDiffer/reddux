@@ -1,5 +1,5 @@
 // Manage user subreddits
-import { generateBearerHeader, showError } from './_shared';
+import { buildAuthorizationHeader, showError } from './_shared';
 import { stringify } from 'querystring';
 
 const baseUrl = 'https://oauth.reddit.com';
@@ -7,7 +7,7 @@ const baseUrl = 'https://oauth.reddit.com';
 const getSubreddits = endpoint => {
   const url = `${baseUrl}/${endpoint}`;
   const config = {
-    headers: generateBearerHeader()
+    'Authorization': buildAuthorizationHeader('bearer')
   };
 
   return fetch(url, config)
@@ -33,7 +33,7 @@ export const postToSubscription = params => {
     body,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      ...generateBearerHeader()
+      'Authorization': buildAuthorizationHeader('bearer')
     },
     cache: 'no-cache'
   };

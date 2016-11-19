@@ -1,10 +1,12 @@
 // get the front page
-import { generateBearerHeader, showError } from './_shared';
+import { buildAuthorizationHeader, showError } from './_shared';
 
 export default () => {
   const url = 'https://oauth.reddit.com/.json';
   const config = {
-    headers: generateBearerHeader()
+    headers: {
+      'Authorization': buildAuthorizationHeader('bearer')
+    }
   };
 
   return fetch(url, config)

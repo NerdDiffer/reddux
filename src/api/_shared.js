@@ -1,16 +1,32 @@
 import { accessTokenStorage } from '../utils/storage';
 
-export const generateBearerHeader = () => {
+const { REDDIT_CLIENT_ID, REDDIT_SECRET } = process.env;
+
+const buildBearerAuthHeader = () => {
   const token = accessTokenStorage.get();
-  const authValue = `Bearer ${token}`;
-  return { 'Authorization': authValue };
+  return `Bearer ${token}`;
 };
 
-export const generateBasicHeader = (username, password) => {
+const buildBasicAuthHeader = () => {
+  const username = REDDIT_CLIENT_ID;
+  const password = REDDIT_SECRET;
+
   const str = `${username}:${password}`;
   const encoded = window.btoa(str); // base-64 encoding
-  const authValue = `Basic ${encoded}`;
-  return { 'Authorization': authValue };
+  return `Basic ${encoded}`;
+};
+
+export const buildAuthorizationHeader = schema => {
+  switch(schema.toLowerCase()) {
+    case 'bearer':
+      return buildBearerAuthHeader();
+    case 'basic': {
+      return buildBasicAuthHeader();
+    }
+    default: {
+      return null;
+    }
+  }
 };
 
 export const showError = err => {

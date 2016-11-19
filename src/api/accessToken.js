@@ -1,18 +1,16 @@
 import { stringify } from 'querystring';
-import { generateBasicHeader, showError } from './_shared';
+import { buildAuthorizationHeader, showError } from './_shared';
 
 const postForToken = params => {
   const url = 'https://www.reddit.com/api/v1/access_token';
 
   const body = stringify(params);
-  const { REDDIT_CLIENT_ID: username, REDDIT_SECRET: password } = process.env;
-
   const config = {
     method: 'POST',
     body,
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      ...generateBasicHeader(username, password)
+      'Authorization': buildAuthorizationHeader('basic')
     },
     cache: 'no-cache'
   };
