@@ -1,10 +1,9 @@
-import { stringify } from 'querystring';
-import { buildAuthorizationHeader, showError } from './_shared';
+import { buildAuthorizationHeader, stringifyData, showError } from './_shared';
 
 const postForToken = params => {
   const url = 'https://www.reddit.com/api/v1/access_token';
 
-  const body = stringify(params);
+  const body = stringifyData(params);
   const config = {
     method: 'POST',
     body,

@@ -1,3 +1,4 @@
+import { stringify } from 'querystring';
 import { accessTokenStorage } from '../utils/storage';
 
 const { REDDIT_CLIENT_ID, REDDIT_SECRET } = process.env;
@@ -28,6 +29,8 @@ export const buildAuthorizationHeader = schema => {
     }
   }
 };
+
+export const stringifyData = data => stringify(data);
 
 export const showError = err => {
   console.log(err);

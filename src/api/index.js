@@ -1,8 +1,7 @@
-import { stringify } from 'querystring';
-
 import * as subreddits from './subreddits';
 import getFrontPage from './frontPage';
 import * as accessToken from './accessToken';
+import { stringifyData } from './_shared';
 
 // https://github.com/reddit/reddit/wiki/OAuth2#authorization
 const authUrl = (() => {
@@ -15,8 +14,8 @@ const authUrl = (() => {
     duration: 'permanent',
     scope: 'identity mysubreddits read subscribe'
   };
-  const stringifiedParams = stringify(params);
-  return `${baseUrl}?${stringifiedParams}`;
+  const stringified = stringifyData(params);
+  return `${baseUrl}?${stringified}`;
 })();
 
 export { authUrl, subreddits, accessToken, getFrontPage };

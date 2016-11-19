@@ -1,6 +1,5 @@
 // Manage user subreddits
-import { buildAuthorizationHeader, showError } from './_shared';
-import { stringify } from 'querystring';
+import { buildAuthorizationHeader, stringifyData, showError } from './_shared';
 
 const baseUrl = 'https://oauth.reddit.com';
 
@@ -26,7 +25,7 @@ export const getPopularSubreddits = getSubreddits.bind(null, '/subreddits/popula
 
 export const postToSubscription = params => {
   const url = `${baseUrl}/api/subscribe`;
-  const body = stringify(params);
+  const body = stringifyData(params);
 
   const config = {
     method: 'POST',
