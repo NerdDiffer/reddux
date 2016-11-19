@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
+import { Provider } from 'react-redux';
 import { Router, Route, browserHistory } from 'react-router';
+import { configureStore, getInitialState } from './state/store';
+
+const store = configureStore(getInitialState());
 
 import App from './components/App';
 import FrontPage from './components/FrontPage';
@@ -19,6 +23,8 @@ const routes = (
 );
 
 render(
-  <Router history={browserHistory} routes={routes} />,
+  <Provider store={store}>
+    <Router history={browserHistory} routes={routes} />
+  </Provider>,
   document.querySelector('.mount')
 );
