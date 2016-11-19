@@ -2,3 +2,5 @@ export const AUTH_ACCEPT = 'AUTH_ACCEPT';
 export const AUTH_DENIAL = 'AUTH_DENIAL';
 export const AUTH_REVOKE = 'AUTH_REVOKE';
 export const AUTH_ERROR  = 'AUTH_ERROR';
+export const AUTH_IS_FETCHING = 'AUTH_IS_FETCHING';
+export const AUTH_IS_NOT_FETCHING = 'AUTH_IS_NOT_FETCHING';
