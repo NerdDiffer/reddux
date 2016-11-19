@@ -1,13 +1,19 @@
-// Get the user subreddits
+// Manage user subreddits
 import { generateBearerHeader, showError } from './_shared';
+import { stringify } from 'querystring';
 
-const getSubreddits = (url, client) => {
-  const headers = generateBearerHeader();
+const baseUrl = 'https://oauth.reddit.com';
 
-  return client.get(url, { headers })
+const getSubreddits = endpoint => {
+  const url = `${baseUrl}/${endpoint}`;
+  const config = {
+    headers: generateBearerHeader()
+  };
+
+  return fetch(url, config)
     .then(res => {
-      // console.log(res);
-      return res.data.data;
+      console.log(res);
+      return res.json();
     })
     .catch(err => {
       showError(err);
@@ -18,16 +24,24 @@ const getSubreddits = (url, client) => {
 export const getMySubreddits = getSubreddits.bind(null, '/subreddits/mine/subscriber');
 export const getPopularSubreddits = getSubreddits.bind(null, '/subreddits/popular');
 
-export const postToSubscription = (client, params) => {
-  const url = '/api/subscribe';
+export const postToSubscription = params => {
+  const url = `${baseUrl}/api/subscribe`;
+  const body = stringify(params);
 
-  const headers = generateBearerHeader();
-  headers['Content-Type'] = 'application/x-www-form-urlencoded';
+  const config = {
+    method: 'POST',
+    body,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      ...generateBearerHeader()
+    },
+    cache: 'no-cache'
+  };
 
-  return client.post(url, params, { headers })
+  return fetch(url, config)
     .then(res => {
       console.log(res);
-      return res.data.data;
+      return res.json();
     })
     .catch(err => {
       showError(err);

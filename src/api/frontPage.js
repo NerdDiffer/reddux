@@ -1,13 +1,16 @@
 // get the front page
 import { generateBearerHeader, showError } from './_shared';
 
-export default client => {
+export default () => {
   const url = 'https://oauth.reddit.com/.json';
-  const headers = generateBearerHeader();
+  const config = {
+    headers: generateBearerHeader()
+  };
 
-  return client.get(url, { headers })
+  return fetch(url, config)
     .then(res => {
-      return res;
+      console.log(res);
+      return res.json();
     })
     .catch(err => {
       showError(err)

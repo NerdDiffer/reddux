@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Icon, Button } from 'semantic-ui-react';
-import apiClient, { subreddits } from '../../api';
+import { subreddits } from '../../api';
 import Subreddit from './Subreddit';
 
 const { getMySubreddits, getPopularSubreddits, postToSubscription } = subreddits;
@@ -31,9 +31,9 @@ class Subreddits extends Component {
   handleGetMySubreddits() {
     this.setState({ isFetching: true });
 
-    getMySubreddits(apiClient)
-      .then(data => {
-        const { children } = data;
+    getMySubreddits()
+      .then(res => {
+        const { children } = res.data;
         console.log(children);
 
         // store an object of subreddit subscriptions, indexed by their url
@@ -56,9 +56,10 @@ class Subreddits extends Component {
   handleGetPopularSubreddits() {
     this.setState({ isFetching: true });
 
-    getPopularSubreddits(apiClient)
-      .then(data => {
-        const { children } = data;
+    getPopularSubreddits()
+      .then(res => {
+        const { children } = res.data;
+        console.log(children);
 
         this.setState({
           selectedCollection: children,
@@ -70,8 +71,9 @@ class Subreddits extends Component {
 
   handleSubscription(action, subredditName) {
     console.log(action, subredditName);
-    const params = { action, sr_name: subredditName };
-    postToSubscription(apiClient, params);
+    const params = { action, sr: subredditName };
+    // TODO: handle response, update state, etc
+    postToSubscription(params);
   }
 
   renderHeader() {

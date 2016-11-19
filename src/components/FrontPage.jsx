@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Icon } from 'semantic-ui-react';
-import apiClient, {
-  getFrontPage
-} from '../api';
+import { getFrontPage } from '../api';
 import Post from './Post';
 
 class FrontPage extends Component {
@@ -25,10 +23,9 @@ class FrontPage extends Component {
   handleGetFrontPage() {
     this.setState({ isFetching: true });
 
-    getFrontPage(apiClient)
+    getFrontPage()
       .then(res => {
-        console.log(res);
-        const { children } = res.data.data;
+        const { children } = res.data;
 
         this.setState({
           posts: children,

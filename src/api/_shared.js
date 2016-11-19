@@ -1,6 +1,8 @@
+import { accessTokenStorage } from '../utils/storage';
+
 export const generateBearerHeader = () => {
-  const { REDDIT_ACCESS_TOKEN } = process.env;
-  const authValue = `Bearer ${REDDIT_ACCESS_TOKEN}`;
+  const token = accessTokenStorage.get();
+  const authValue = `Bearer ${token}`;
   return { 'Authorization': authValue };
 };
 
