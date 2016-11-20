@@ -1,7 +1,7 @@
 // get the front page
 import { buildAuthorizationHeader, showError } from './_shared';
 
-export default () => {
+export const getFrontPage = () => {
   const url = 'https://oauth.reddit.com/.json';
   const config = {
     headers: {

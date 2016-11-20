@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Icon } from 'semantic-ui-react';
-import { getFrontPage } from '../../api';
+import { getFrontPage } from '../../api/feed';
 import Post from './Post';
 
 class FrontPage extends Component {

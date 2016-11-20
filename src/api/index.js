@@ -1,5 +1,5 @@
 import * as subreddits from './subreddits';
-import getFrontPage from './frontPage';
+import * as feed from './feed';
 import * as accessToken from './accessToken';
 import { stringifyData } from './_shared';
 
@@ -18,4 +18,4 @@ const authUrl = (() => {
   return `${baseUrl}?${stringified}`;
 })();
 
-export { authUrl, subreddits, accessToken, getFrontPage };
+export { authUrl, subreddits, accessToken, feed };
