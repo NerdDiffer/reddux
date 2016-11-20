@@ -24,23 +24,15 @@ const AuthReducer = (prevState = {}, action) => {
     case AUTH_ACCEPT: {
       return {
         ...prevState,
-        isAuthorized: true,
-        errorMessage: null
+        isAuthorized: true
       };
     }
+    case AUTH_ERROR:
     case AUTH_REVOKE:
     case AUTH_DENIAL: {
       return {
         ...prevState,
-        isAuthorized: false,
-        errorMessage: null
-      };
-    }
-    case AUTH_ERROR: {
-      return {
-        ...prevState,
-        isAuthorized: false,
-        errorMessage: action.payload
+        isAuthorized: false
       };
     }
     default: {

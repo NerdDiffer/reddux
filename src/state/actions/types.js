@@ -12,3 +12,8 @@ export const SR_TO_SHOW = 'SR_TO_SHOW';
 export const SR_NAME_TO_SHOW = 'SR_NAME_TO_SHOW';
 export const SR_IS_FETCHING = 'SR_IS_FETCHING';
 export const SR_IS_NOT_FETCHING = 'SR_IS_NOT_FETCHING';
+
+export const MSG_SUCCESS = 'MSG_SUCCESS';
+export const MSG_INFO = 'MSG_INFO';
+export const MSG_WARNING = 'MSG_WARNING';
+export const MSG_ERROR = 'MSG_ERROR';
