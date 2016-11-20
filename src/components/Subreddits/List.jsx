@@ -1,27 +1,27 @@
 import React, { Component } from 'react';
 import { Icon, Button } from 'semantic-ui-react';
-import { subreddits } from '../../api';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as actions from '../../state/actions/subreddits';
 import Subreddit from './Subreddit';
-
-const { getMySubreddits, getPopularSubreddits, postToSubscription } = subreddits;
 
 class Subreddits extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      subscribedTo: [],
-      selectedCollection: [],
-      nameOfSelectedCollection: null,
-      isFetching: false
-    };
+    //this.state = {
+    //  subscribedTo: [],
+    //  collectionToShow: [],
+    //  nameOfSelectedCollection: null,
+    //  isFetching: false
+    //};
 
     this.renderChildren = this.renderChildren.bind(this);
     this.handleGetMySubreddits = this.handleGetMySubreddits.bind(this);
     this.handleGetPopularSubreddits = this.handleGetPopularSubreddits.bind(this);
-    this.handleSubscription = this.handleSubscription.bind(this);
-    this.handleSubscribe = this.handleSubscription.bind(this, 'sub');
-    this.handleUnsubscribe = this.handleSubscription.bind(this, 'unsub');
+
+    this.handleSubscribe = this.handleSubscribe.bind(this);
+    this.handleUnsubscribe = this.handleUnsubscribe.bind(this);
   }
 
   componentDidMount() {
@@ -29,76 +29,44 @@ class Subreddits extends Component {
   }
 
   handleGetMySubreddits() {
-    this.setState({ isFetching: true });
-
-    getMySubreddits()
-      .then(res => {
-        const { children } = res.data;
-        console.log(children);
-
-        // store an object of subreddit subscriptions, indexed by their url
-        const subscribedTo = children.reduce((obj, { data }) => {
-          const { url, name } =  data;
-          obj[url] = name;
-
-          return obj;
-        }, {});
-
-        this.setState({
-          subscribedTo,
-          selectedCollection: children,
-          nameOfSelectedCollection: 'My',
-          isFetching: false
-        });
-      });
+    return this.props.handleGetMySubreddits();
   }
 
   handleGetPopularSubreddits() {
-    this.setState({ isFetching: true });
-
-    getPopularSubreddits()
-      .then(res => {
-        const { children } = res.data;
-        console.log(children);
-
-        this.setState({
-          selectedCollection: children,
-          nameOfSelectedCollection: 'Popular',
-          isFetching: false
-        });
-      });
+    return this.props.handleGetPopularSubreddits();
   }
 
-  handleSubscription(action, subredditName) {
-    console.log(action, subredditName);
-    const params = { action, sr: subredditName };
-    // TODO: handle response, update state, etc
-    postToSubscription(params);
+  handleSubscribe({ url, name }) {
+    return this.props.handleSubscribe({ url, name });
+  }
+
+  handleUnsubscribe({ url, name }) {
+    return this.props.handleUnsubscribe({ url, name });
   }
 
   renderHeader() {
-    const { nameOfSelectedCollection } = this.state;
+    //const { nameOfSelectedCollection } = this.state;
 
-    return (
-      nameOfSelectedCollection ?
-        <h3>{`${nameOfSelectedCollection} Subreddits`}</h3> :
-        null
-    );
+    //return (
+    //  nameOfSelectedCollection ?
+    //    <h3>{`${nameOfSelectedCollection} Subreddits`}</h3> :
+    //    null
+    //);
   }
 
   renderChildren() {
-    const { selectedCollection, subscribedTo } = this.state;
+    const { subscribedTo, collectionToShow } = this.props;
 
-    if (!selectedCollection) {
+    if (!subscribedTo) {
       return null;
     } else {
-      return selectedCollection.map(({ data }, ind) => {
+      return collectionToShow.map(({ data }, ind) => {
         const { title, url, name } = data;
         const isSubscribed = subscribedTo.hasOwnProperty(url);
 
         const handleSubscription = isSubscribed ?
-          () => this.handleUnsubscribe(name) :
-          () => this.handleSubscribe(name);
+          () => this.handleUnsubscribe({ url, name }) :
+          () => this.handleSubscribe({ url, name });
 
         return (
           <Subreddit
@@ -115,7 +83,7 @@ class Subreddits extends Component {
   }
 
   render() {
-    const { isFetching } = this.state;
+    const { isFetching } = this.props;
 
     return(
       <div className="subreddits">
@@ -129,11 +97,19 @@ class Subreddits extends Component {
           color="black"
           loading={isFetching}
         />
-        {this.renderHeader()}
         {this.renderChildren()}
       </div>
     );
   }
 }
 
-export default Subreddits;
+const mapStateToProps = ({ subreddits }) => ({ ...subreddits });
+
+const mapDispatchToProps = dispatch => bindActionCreators({ ...actions }, dispatch);
+
+const ConnectedSubreddits = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Subreddits);
+
+export default ConnectedSubreddits;
