@@ -58,26 +58,24 @@ export const handleGetPopularSubreddits = () => {
   return thunk;
 };
 
-export const handleSubscribe = subredditName => {
+export const handleSubscribe = ({ url, name }) => {
   const thunk = dispatch => {
-    const params = { action: 'sub', sr: subredditName };
-    console.log(params);
-    // TODO: handle response, update state, etc
+    const params = { action: 'sub', sr: name };
+    const payload = { url, name };
+
     return postToSubscription(params)
-      .then(res => {
-        dispatch({ type: SR_SUBSCRIBED_ADD, payload: subredditName })
-      })
+      .then(res => dispatch({ type: SR_SUBSCRIBED_ADD, payload }));
   };
 
   return thunk;
 };
 
-export const handleUnsubscribe = subredditName => {
+export const handleUnsubscribe = ({ url, name }) => {
   const thunk = dispatch => {
-    const params = { action: 'unsub', sr: subredditName };
-    console.log(params);
-    // TODO: handle response, update state, etc
-    postToSubscription(params);
+    const params = { action: 'unsub', sr: name };
+
+    return postToSubscription(params)
+      .then(res => dispatch({ type: SR_SUBSCRIBED_REM, payload: url }));
   };
 
   return thunk;
