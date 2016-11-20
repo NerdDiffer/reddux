@@ -3,8 +3,15 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { Router, Route, browserHistory } from 'react-router';
 import { configureStore, getInitialState } from './state/store';
+import { AUTH_ACCEPT } from './state/actions/types';
+import { accessTokenStorage } from './utils/storage';
 
 const store = configureStore(getInitialState());
+
+const accessToken = accessTokenStorage.get();
+if (!!accessToken) {
+  store.dispatch({ type: AUTH_ACCEPT });
+}
 
 import App from './components/App';
 import FrontPage from './components/FrontPage';
