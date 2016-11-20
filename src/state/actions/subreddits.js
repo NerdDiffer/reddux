@@ -3,6 +3,7 @@ import {
   SR_SUBSCRIBED_ADD,
   SR_SUBSCRIBED_REM,
   SR_TO_SHOW,
+  SR_NAME_TO_SHOW,
   SR_IS_FETCHING,
   SR_IS_NOT_FETCHING,
 } from '../actions/types';
@@ -28,13 +29,11 @@ export const handleGetMySubreddits = () => {
         const { children } = res.data;
         dispatch({ type: SR_IS_NOT_FETCHING });
         dispatch({ type: SR_TO_SHOW, payload: children });
+        dispatch({ type: SR_NAME_TO_SHOW, payload: 'My' });
         const subscribedTo = mapSubredditsByUrl(children);
         dispatch({ type: SR_SUBSCRIBED_REPLACE_ALL, payload: subscribedTo });
       })
       .catch(err => err);
-      //this.setState({
-      //  nameOfSelectedCollection: 'My',
-      //});
   };
 
   return thunk;
@@ -49,9 +48,7 @@ export const handleGetPopularSubreddits = () => {
         const { children } = res.data;
         dispatch({ type: SR_IS_NOT_FETCHING });
         dispatch({ type: SR_TO_SHOW, payload: children });
-        //this.setState({
-        //  nameOfSelectedCollection: 'Popular',
-        //});
+        dispatch({ type: SR_NAME_TO_SHOW, payload: 'Popular' });
       });
   };
 

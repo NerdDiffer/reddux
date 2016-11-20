@@ -9,13 +9,6 @@ class Subreddits extends Component {
   constructor(props) {
     super(props);
 
-    //this.state = {
-    //  subscribedTo: [],
-    //  collectionToShow: [],
-    //  nameOfSelectedCollection: null,
-    //  isFetching: false
-    //};
-
     this.renderChildren = this.renderChildren.bind(this);
     this.handleGetMySubreddits = this.handleGetMySubreddits.bind(this);
     this.handleGetPopularSubreddits = this.handleGetPopularSubreddits.bind(this);
@@ -45,13 +38,13 @@ class Subreddits extends Component {
   }
 
   renderHeader() {
-    //const { nameOfSelectedCollection } = this.state;
+    const { nameOfCollectionToShow } = this.props;
 
-    //return (
-    //  nameOfSelectedCollection ?
-    //    <h3>{`${nameOfSelectedCollection} Subreddits`}</h3> :
-    //    null
-    //);
+    return (
+      nameOfCollectionToShow ?
+        <h3>{`${nameOfCollectionToShow} Subreddits`}</h3> :
+        null
+    );
   }
 
   renderChildren() {
@@ -97,6 +90,7 @@ class Subreddits extends Component {
           color="black"
           loading={isFetching}
         />
+        {this.renderHeader()}
         {this.renderChildren()}
       </div>
     );

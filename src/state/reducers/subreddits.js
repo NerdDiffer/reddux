@@ -3,6 +3,7 @@ import {
   SR_SUBSCRIBED_ADD,
   SR_SUBSCRIBED_REM,
   SR_TO_SHOW,
+  SR_NAME_TO_SHOW,
   SR_IS_FETCHING,
   SR_IS_NOT_FETCHING,
 } from '../actions/types';
@@ -41,6 +42,12 @@ const SubredditsReducer = (prevState = {}, action) => {
       return {
         ...prevState,
         collectionToShow: action.payload
+      };
+    }
+    case SR_NAME_TO_SHOW: {
+      return {
+        ...prevState,
+        nameOfCollectionToShow: action.payload
       };
     }
     case SR_IS_FETCHING: {
