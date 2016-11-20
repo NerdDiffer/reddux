@@ -3,7 +3,7 @@ import { Icon } from 'semantic-ui-react';
 import { getFrontPage } from '../../api/feed';
 import Post from './Post';
 
-class FrontPage extends Component {
+class Feed extends Component {
   constructor(props) {
     super(props);
 
@@ -49,7 +49,7 @@ class FrontPage extends Component {
   render() {
     return(
       <div className="subreddits">
-        <h2>FrontPage</h2>
+        <h2>Feed</h2>
         <Icon
           name="refresh"
           size="large"
@@ -63,4 +63,4 @@ class FrontPage extends Component {
   }
 }
 
-export default FrontPage;
+export default Feed;
