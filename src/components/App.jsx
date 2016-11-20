@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Segment } from 'semantic-ui-react';
 import Nav from './Nav';
+import FlashMessage from './FlashMessage';
 
 const App = (props) => (
   <Container
@@ -10,6 +11,7 @@ const App = (props) => (
   >
     <Segment>
       <Nav />
+      <FlashMessage />
       <h1>Reddit Reader</h1>
       {props.children}
     </Segment>
