@@ -14,7 +14,7 @@ if (!!accessToken) {
 }
 
 import App from './components/App';
-import FrontPage from './components/FrontPage';
+import Feed from './components/Feed/List';
 import SubredditsList from './components/Subreddits/List';
 import Authorize from './components/OAuth/Authorize';
 import OAuthCallback from './components/OAuth/Callback';
@@ -25,7 +25,7 @@ const routes = (
     <Route path="/subreddits" component={SubredditsList} />
     <Route path="/oauth" component={Authorize} />
     <Route path="/oauth/callback" component={OAuthCallback} />
-    <Route path="/front_page" component={FrontPage} />
+    <Route path="/feed" component={Feed} />
   </Route>
 );
 
