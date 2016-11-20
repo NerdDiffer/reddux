@@ -4,7 +4,7 @@ import { buildAuthorizationHeader, stringifyData, showError } from './_shared';
 const baseUrl = 'https://oauth.reddit.com';
 
 const getSubreddits = endpoint => {
-  const url = `${baseUrl}/${endpoint}`;
+  const url = `${baseUrl}${endpoint}`;
   const config = {
     headers: {
       'Authorization': buildAuthorizationHeader('bearer')

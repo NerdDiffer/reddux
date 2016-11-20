@@ -3,10 +3,9 @@ import { buildAuthorizationHeader, stringifyData, showError } from './_shared';
 const postForToken = params => {
   const url = 'https://www.reddit.com/api/v1/access_token';
 
-  const body = stringifyData(params);
   const config = {
     method: 'POST',
-    body,
+    body: stringifyData(params),
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
       'Authorization': buildAuthorizationHeader('basic')
