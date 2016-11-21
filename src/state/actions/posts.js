@@ -1,13 +1,15 @@
+import { browserHistory } from 'react-router';
 import {
   POSTS_FETCHING,
   POSTS_SUCCESS,
   POSTS_ERROR,
   POSTS_FORCE_REFRESH,
-  POSTS_SR_NAME
+  POSTS_SR_NAME,
+  MSG_ERROR,
+  AUTH_ERROR
 } from '../constants/actionTypes';
 import { FRONT_PAGE } from '../constants';
 import { getFrontPage, getPosts } from '../../api/feed';
-import { showError } from '../../api/_shared';
 
 /**
  * The variable, `sr_display_name`, refers to the `display_name` of the subreddit.
@@ -33,15 +35,20 @@ const postsSuccess = (dispatch, sr_display_name, json) => {
   });
 };
 
-const postsError = (dispatch, sr_display_name, err) => {
-  showError(err);
-
+const postsError = (dispatch, sr_display_name, errorMessage) => {
   return dispatch({
     type: POSTS_ERROR,
     sr_display_name,
-    errorMessage: err,
+    errorMessage,
     receivedAt: Date.now()
   });
+};
+
+const handleAuthError = (dispatch, sr_display_name, msg) => {
+  dispatch({ type: AUTH_ERROR });
+  dispatch({ type: MSG_ERROR, payload: msg });
+  postsError(dispatch, sr_display_name, msg);
+  browserHistory.push('/oauth');
 };
 
 const fetchPosts = (dispatch, sr_display_name) => {
@@ -53,7 +60,8 @@ const fetchPosts = (dispatch, sr_display_name) => {
         return postsSuccess(dispatch, sr_display_name, json);
       })
       .catch(err => {
-        return postsError(dispatch, sr_display_name, err);
+        const errorMessage = err.toString();
+        return handleAuthError(dispatch, sr_display_name, errorMessage);
       });
   } else {
     return getPosts(sr_display_name)
@@ -61,7 +69,8 @@ const fetchPosts = (dispatch, sr_display_name) => {
         return postsSuccess(dispatch, sr_display_name, json);
       })
       .catch(err => {
-        return postsError(dispatch, sr_display_name, err);
+        const errorMessage = err.toString();
+        return handleAuthError(dispatch, sr_display_name, errorMessage);
       });
   }
 };
