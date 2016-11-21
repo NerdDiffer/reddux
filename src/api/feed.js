@@ -13,7 +13,7 @@ export const getFrontPage = () => {
   };
 
   return fetch(url, config)
-    .then(preProcessResponse);
+    .then(res => preProcessResponse(res));
 };
 
 /**
@@ -24,5 +24,5 @@ export const getPosts = (subreddit, criteria = 'hot') => {
   const url = `https://www.reddit.com/r/${subreddit}.json`;
 
   return fetch(url)
-    .then(preProcessResponse);
+    .then(res => preProcessResponse(res));
 };

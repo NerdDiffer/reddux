@@ -14,7 +14,7 @@ const postForToken = params => {
   };
 
   return fetch(url, config)
-    .then(preProcessResponse);
+    .then(res => preProcessResponse(res));
 };
 
 // https://github.com/reddit/reddit/wiki/OAuth2#retrieving-the-access-token
@@ -53,5 +53,5 @@ export const revoke = ({ token, tokenType }) => {
   };
 
   return fetch(url, config)
-    .then(preProcessResponse);
+    .then(res => preProcessResponse(res));
 };

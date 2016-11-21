@@ -12,7 +12,7 @@ const getSubreddits = endpoint => {
   };
 
   return fetch(url, config)
-    .then(preProcessResponse);
+    .then(res => preProcessResponse(res));
 };
 
 export const getMySubreddits = getSubreddits.bind(null, '/subreddits/mine/subscriber');
@@ -33,5 +33,5 @@ export const postToSubscription = params => {
   };
 
   return fetch(url, config)
-    .then(preProcessResponse);
+    .then(res => preProcessResponse(res));
 };
