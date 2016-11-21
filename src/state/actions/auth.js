@@ -99,17 +99,27 @@ export const checkForAuthToken = () => {
 
 export const handleRequestRefreshToken = () => {
   const thunk = dispatch => {
-    dispatch({ type: AUTH_IS_FETCHING });
     const token = refreshTokenStorage.get();
 
-    return accessToken.refresh(token)
-      .then(data => {
-        console.log(data);
-        accessTokenStorage.set(data.access_token);
-        refreshTokenStorage.clear();
-        authToken(dispatch, true);
-        dispatch({ type: AUTH_IS_NOT_FETCHING });
-      });
+    if (!token) {
+      const msg = "Need something in 'localStorage.refresh_token' to do this";
+      return authError(dispatch, msg);
+    } else {
+      dispatch({ type: AUTH_IS_FETCHING });
+
+      return accessToken.refresh(token)
+        .then(data => {
+          console.log(data);
+          accessTokenStorage.set(data.access_token);
+          refreshTokenStorage.clear();
+          authToken(dispatch, true);
+          dispatch({ type: AUTH_IS_NOT_FETCHING });
+        })
+        .catch(err => {
+          dispatch({ type: AUTH_IS_NOT_FETCHING });
+          return authError(dispatch, err.toString());
+        });
+    }
   };
 
   return thunk;
