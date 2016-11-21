@@ -13,7 +13,7 @@ import {
   MSG_INFO,
   MSG_WARNING,
   MSG_ERROR
-} from './types';
+} from '../constants/actionTypes';
 import { accessToken } from '../../api';
 import { accessTokenStorage, refreshTokenStorage } from '../../utils/storage';
 

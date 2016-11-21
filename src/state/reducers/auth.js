@@ -8,7 +8,7 @@ import {
   AUTH_IS_NOT_FETCHING,
   AUTH_IS_REVOKING,
   AUTH_IS_NOT_REVOKING
-} from '../actions/types';
+} from '../constants/actionTypes';
 
 const AuthReducer = (prevState = {}, action) => {
   switch(action.type) {

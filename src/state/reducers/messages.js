@@ -3,7 +3,7 @@ import {
   MSG_ERROR,
   MSG_INFO,
   MSG_WARNING
-} from '../actions/types';
+} from '../constants/actionTypes';
 
 const MessagesReducer = (prevState = {}, action) => {
   switch(action.type) {

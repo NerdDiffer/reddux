@@ -4,7 +4,7 @@ import {
   POSTS_ERROR,
   POSTS_FORCE_REFRESH,
   POSTS_SR_NAME
-} from '../actions/types';
+} from '../constants/actionTypes';
 
 const fallbackState = {
   isFetching: false,

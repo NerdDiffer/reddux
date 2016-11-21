@@ -6,7 +6,7 @@ import {
   SR_NAME_TO_SHOW,
   SR_IS_FETCHING,
   SR_IS_NOT_FETCHING,
-} from '../actions/types';
+} from '../constants/actionTypes';
 
 const SubredditsReducer = (prevState = {}, action) => {
   switch(action.type) {
