@@ -1,5 +1,5 @@
 // Manage user subreddits
-import { buildAuthorizationHeader, stringifyData, showError } from './_shared';
+import { buildAuthorizationHeader, stringifyData, preProcessResponse } from './_shared';
 
 const baseUrl = 'https://oauth.reddit.com';
 
@@ -12,14 +12,7 @@ const getSubreddits = endpoint => {
   };
 
   return fetch(url, config)
-    .then(res => {
-      console.log(res);
-      return res.json();
-    })
-    .catch(err => {
-      showError(err);
-      return err;
-    });
+    .then(preProcessResponse);
 };
 
 export const getMySubreddits = getSubreddits.bind(null, '/subreddits/mine/subscriber');
@@ -40,11 +33,5 @@ export const postToSubscription = params => {
   };
 
   return fetch(url, config)
-    .then(res => {
-      console.log(res);
-      return res.json();
-    })
-    .catch(err => {
-      showError(err);
-    });
+    .then(preProcessResponse);
 };

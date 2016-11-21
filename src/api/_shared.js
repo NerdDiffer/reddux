@@ -32,6 +32,7 @@ export const buildAuthorizationHeader = schema => {
 
 export const stringifyData = data => stringify(data);
 
+// TODO: fix this method for regular JS promises, not axios-wrapped promises
 export const showError = err => {
   console.log(err);
   console.log(err.config);
@@ -43,5 +44,14 @@ export const showError = err => {
     console.log(status);
     console.log(headers);
     console.log(data);
+  }
+};
+
+export const preProcessResponse = res => {
+  if (!res.ok) {
+    const { statusText } = res;
+    throw Error(statusText);
+  } else {
+    return res.json()
   }
 };

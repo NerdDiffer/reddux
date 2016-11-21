@@ -1,4 +1,4 @@
-import { buildAuthorizationHeader, stringifyData, showError } from './_shared';
+import { buildAuthorizationHeader, stringifyData, preProcessResponse } from './_shared';
 
 const postForToken = params => {
   const url = 'https://www.reddit.com/api/v1/access_token';
@@ -14,13 +14,7 @@ const postForToken = params => {
   };
 
   return fetch(url, config)
-    .then(res => {
-      console.log(res);
-      return res.json()
-    })
-    .catch(err => {
-      showError(err);
-    });
+    .then(preProcessResponse);
 };
 
 // https://github.com/reddit/reddit/wiki/OAuth2#retrieving-the-access-token
@@ -44,5 +38,20 @@ export const refresh = refresh_token => {
   return postForToken.call(null, params);
 };
 
-// TODO: add code for revoking token (ie: when user logs out)
 // https://github.com/reddit/reddit/wiki/OAuth2#manually-revoking-a-token
+export const revoke = ({ token, tokenType }) => {
+  const params = { token, tokenType };
+  const url = 'https://www.reddit.com/api/v1/revoke_token';
+  const config = {
+    method: 'POST',
+    body: stringifyData(params),
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': buildAuthorizationHeader('basic')
+    },
+    cache: 'no-cache'
+  };
+
+  return fetch(url, config)
+    .then(preProcessResponse);
+};
