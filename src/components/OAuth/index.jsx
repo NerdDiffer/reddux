@@ -3,7 +3,7 @@ import { Button } from 'semantic-ui-react';
 import { authUrl, accessToken } from '../../api';
 import { accessTokenStorage, refreshTokenStorage } from '../../utils/storage';
 
-class Authorize extends Component {
+class OAuthPanel extends Component {
   constructor(props) {
     super(props);
 
@@ -62,4 +62,4 @@ class Authorize extends Component {
   }
 };
 
-export default Authorize;
+export default OAuthPanel;

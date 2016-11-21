@@ -16,14 +16,14 @@ if (!!accessToken) {
 import App from './components/App';
 import Feed from './components/Feed/List';
 import SubredditsList from './components/Subreddits/List';
-import Authorize from './components/OAuth/Authorize';
+import OAuthPanel from './components/OAuth';
 import OAuthCallback from './components/OAuth/Callback';
 
 // Route config
 const routes = (
   <Route path="/" component={App}>
     <Route path="/subreddits" component={SubredditsList} />
-    <Route path="/oauth" component={Authorize} />
+    <Route path="/oauth" component={OAuthPanel} />
     <Route path="/oauth/callback" component={OAuthCallback} />
     <Route path="/feed" component={Feed} />
   </Route>
