@@ -14,8 +14,8 @@ const { getMySubreddits, getPopularSubreddits, postToSubscription } = subreddits
 // index subscriptions (by url) for quick comparison
 const mapSubredditsByUrl = arr => (
   arr.reduce((collection, { data }) => {
-    const { url, name } = data;
-    collection[url] = name;
+    const { url, name, display_name } = data;
+    collection[url] = { fullname: name, display_name };
     return collection;
   }, {})
 );
