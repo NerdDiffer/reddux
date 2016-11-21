@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { accessToken } from '../../api';
-import { accessTokenStorage, refreshTokenStorage } from '../../utils/storage';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as actions from '../../state/actions/auth';
 import AuthUrl from './AuthUrl';
 import RetrieveToken from './RetrieveToken';
 
@@ -8,29 +9,11 @@ class OAuthPanel extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      hasAccessToken: !!accessTokenStorage.get(),
-      hasRefreshToken: !!refreshTokenStorage.get()
-    };
-
     this.handleRequestRefreshToken = this.handleRequestRefreshToken.bind(this);
   }
 
   handleRequestRefreshToken() {
-    const token = refreshTokenStorage.get();
-
-    return accessToken.refresh(token)
-      .then(data => {
-        console.log(data);
-        accessTokenStorage.set(data.access_token);
-        refreshTokenStorage.clear();
-      })
-      .then(() => {
-        this.setState({
-          hasAccessToken: true,
-          hasRefreshToken: false
-        });
-      })
+    this.props.handleRequestRefreshToken();
   }
 
   handleRevokeTokens() {
@@ -38,17 +21,22 @@ class OAuthPanel extends Component {
   }
 
   renderLink() {
-    const { hasAccessToken, hasRefreshToken } = this.state;
+    const { hasToken, isFetching } = this.props;
 
-    if (!hasAccessToken || !hasRefreshToken) {
+    if (!hasToken) {
       return (<AuthUrl />);
     } else {
-      return (<RetrieveToken handleClick={this.handleRequestRefreshToken} />);
+      return (
+        <RetrieveToken
+          handleClick={this.handleRequestRefreshToken}
+          loading={isFetching}
+        />
+      );
     }
   }
 
   render() {
-    const { hasAccessToken, hasRefreshToken } = this.state;
+    const { hasToken } = this.props;
 
     return (
       <div className="auth link">
@@ -58,4 +46,18 @@ class OAuthPanel extends Component {
   }
 };
 
-export default OAuthPanel;
+const mapStateToProps = ({ auth }) => ({
+  hasToken: auth.hasToken,
+  isFetching: auth.isFetching
+});
+
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({ ...actions }, dispatch)
+);
+
+const ConnectedOAuthPanel = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(OAuthPanel);
+
+export default ConnectedOAuthPanel;
