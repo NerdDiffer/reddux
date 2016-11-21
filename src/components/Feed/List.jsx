@@ -63,6 +63,8 @@ class Feed extends Component {
         </Message>
       );
     } else {
+      const { mySubs, selectedSub, selectSubreddit } = this.props;
+
       return (
         <Form>
           <Form.Group>
@@ -112,8 +114,6 @@ class Feed extends Component {
   }
 
   render() {
-    const { mySubs, selectedSub, selectSubreddit } = this.props;
-
     return (
       <div className="posts">
         <h2>Feed</h2>
