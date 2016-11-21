@@ -76,7 +76,7 @@ const handleAuthFailure = (dispatch, error) => {
   }
 };
 
-export const handleAuthorization = queryParams => {
+export const handleAuthCallback = queryParams => {
   return dispatch => {
     const { error, code } = queryParams;
 
