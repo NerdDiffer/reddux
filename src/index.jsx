@@ -5,7 +5,7 @@ import { Router, Route, browserHistory } from 'react-router';
 import { configureStore, getInitialState } from './state/store';
 import { checkForAuthToken } from './state/actions/auth';
 
-const store = configureStore();
+const store = configureStore(getInitialState());
 store.dispatch(checkForAuthToken());
 
 import App from './components/App';

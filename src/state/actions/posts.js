@@ -5,10 +5,9 @@ import {
   POSTS_FORCE_REFRESH,
   POSTS_SR_NAME
 } from '../constants/actionTypes';
+import { FRONT_PAGE } from '../constants';
 import { getFrontPage, getPosts } from '../../api/feed';
 import { showError } from '../../api/_shared';
-
-const FRONT_PAGE = '_front_page'; // store front-page posts at this key
 
 /**
  * The variable, `sr_display_name`, refers to the `display_name` of the subreddit.
