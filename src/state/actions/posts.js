@@ -54,25 +54,18 @@ const handleAuthError = (dispatch, sr_display_name, msg) => {
 const fetchPosts = (dispatch, sr_display_name) => {
   dispatch({ type: POSTS_FETCHING, sr_display_name });
 
-  if (sr_display_name === FRONT_PAGE) {
-    return getFrontPage()
-      .then(json => {
-        return postsSuccess(dispatch, sr_display_name, json);
-      })
-      .catch(err => {
-        const errorMessage = err.toString();
-        return handleAuthError(dispatch, sr_display_name, errorMessage);
-      });
-  } else {
-    return getPosts(sr_display_name)
-      .then(json => {
-        return postsSuccess(dispatch, sr_display_name, json);
-      })
-      .catch(err => {
-        const errorMessage = err.toString();
-        return handleAuthError(dispatch, sr_display_name, errorMessage);
-      });
-  }
+  const promise = sr_display_name === FRONT_PAGE ?
+    getFrontPage() :
+    getPosts(sr_display_name);
+
+  return promise
+    .then(json => {
+      return postsSuccess(dispatch, sr_display_name, json);
+    })
+    .catch(err => {
+      const errorMessage = err.toString();
+      return handleAuthError(dispatch, sr_display_name, errorMessage);
+    });
 };
 
 const shouldFetchPosts = (allPosts, sr_display_name) => {
