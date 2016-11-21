@@ -51,9 +51,9 @@ class Feed extends Component {
   }
 
   renderControls() {
-    const { isAuthorized } = this.props;
+    const { hasAuthToken } = this.props;
 
-    if (!isAuthorized) {
+    if (!hasAuthToken) {
       const header = 'You have not authorized access to your Reddit account';
 
       return (
@@ -66,7 +66,7 @@ class Feed extends Component {
       const { mySubs, selectedSub, selectSubreddit } = this.props;
 
       return (
-        <Form>
+        <div className="feed controls">
           <Form.Group>
             <SelectSubreddit
               mySubs={mySubs}
@@ -88,7 +88,7 @@ class Feed extends Component {
               onClick={this.handleForceRefresh}
             />
           </Form.Group>
-        </Form>
+        </div>
       );
     }
   }
@@ -150,7 +150,7 @@ const mapStateToProps = ({ posts = {}, subreddits, auth }) => {
     lastUpdated,
     selectedSub,
     mySubs,
-    isAuthorized: auth.isAuthorized
+    hasAuthToken: auth.hasToken
   };
 };
 
