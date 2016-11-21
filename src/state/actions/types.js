@@ -17,3 +17,9 @@ export const MSG_SUCCESS = 'MSG_SUCCESS';
 export const MSG_INFO = 'MSG_INFO';
 export const MSG_WARNING = 'MSG_WARNING';
 export const MSG_ERROR = 'MSG_ERROR';
+
+export const POSTS_FETCHING = 'POSTS_FETCHING';
+export const POSTS_SUCCESS = 'POSTS_SUCCESS';
+export const POSTS_ERROR = 'POSTS_ERROR';
+export const POSTS_FORCE_REFRESH = 'POSTS_FORCE_REFRESH';
+export const POSTS_SR_NAME = 'POSTS_SR_NAME';
