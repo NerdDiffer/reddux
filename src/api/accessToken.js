@@ -40,7 +40,7 @@ export const refresh = refresh_token => {
 
 // https://github.com/reddit/reddit/wiki/OAuth2#manually-revoking-a-token
 export const revoke = ({ token, tokenType }) => {
-  const params = { token, tokenType };
+  const params = { token, token_type_hint: tokenType };
   const url = 'https://www.reddit.com/api/v1/revoke_token';
   const config = {
     method: 'POST',
@@ -53,5 +53,5 @@ export const revoke = ({ token, tokenType }) => {
   };
 
   return fetch(url, config)
-    .then(res => preProcessResponse(res));
+    .then(res => res); // just returns a 204 status code, even if token was never valid.
 };

@@ -111,7 +111,6 @@ export const handleRequestRefreshToken = () => {
         .then(data => {
           console.log(data);
           accessTokenStorage.set(data.access_token);
-          refreshTokenStorage.clear();
           authToken(dispatch, true);
           dispatch({ type: AUTH_IS_NOT_FETCHING });
         })
@@ -120,6 +119,37 @@ export const handleRequestRefreshToken = () => {
           return authError(dispatch, err.toString());
         });
     }
+  };
+
+  return thunk;
+};
+
+export const handleRevokeTokens = () => {
+  const thunk = dispatch => {
+    const access_token = accessTokenStorage.get();
+    const refresh_token = refreshTokenStorage.get();
+
+    const promises = [
+      () => accessToken.revoke({ token: access_token, tokenType: 'access_token' }),
+      () => accessToken.revoke({ token: refresh_token, tokenType: 'refresh_token' })
+    ];
+
+    dispatch({ type: AUTH_IS_FETCHING });
+
+    return Promise.all(promises)
+      .then(res => {
+        dispatch({ type: AUTH_IS_NOT_FETCHING });
+        dispatch({ type: AUTH_REVOKE });
+        accessTokenStorage.clear();
+        refreshTokenStorage.clear();
+        authToken(dispatch, false);
+        dispatch({ type: MSG_INFO, payload: 'You have revoked access to your account' });
+        browserHistory.push('/');
+      })
+      .catch(err => {
+        dispatch({ type: AUTH_IS_NOT_FETCHING });
+        return authError(dispatch, 'Client credentials invalid');
+      })
   };
 
   return thunk;

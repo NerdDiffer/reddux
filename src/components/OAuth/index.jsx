@@ -4,12 +4,14 @@ import { bindActionCreators } from 'redux';
 import * as actions from '../../state/actions/auth';
 import AuthUrl from './AuthUrl';
 import RetrieveToken from './RetrieveToken';
+import RevokeTokens from './RevokeTokens';
 
 class OAuthPanel extends Component {
   constructor(props) {
     super(props);
 
     this.handleRequestRefreshToken = this.handleRequestRefreshToken.bind(this);
+    this.handleRevokeTokens = this.handleRevokeTokens.bind(this);
   }
 
   handleRequestRefreshToken() {
@@ -17,7 +19,7 @@ class OAuthPanel extends Component {
   }
 
   handleRevokeTokens() {
-    // TODO: add handler & UI for manually revoking tokens
+    this.props.handleRevokeTokens();
   }
 
   renderLink() {
@@ -35,12 +37,28 @@ class OAuthPanel extends Component {
     }
   }
 
+  renderRevokeTokens() {
+    const { hasToken, isFetching } = this.props;
+
+    if (!hasToken) {
+      return null;
+    } else {
+      return (
+        <RevokeTokens
+          handleClick={this.handleRevokeTokens}
+          loading={isFetching}
+        />
+      );
+    }
+  }
+
   render() {
     const { hasToken } = this.props;
 
     return (
       <div className="auth link">
         {this.renderLink()}
+        {this.renderRevokeTokens()}
       </div>
     );
   }
