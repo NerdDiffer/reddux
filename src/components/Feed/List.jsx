@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Icon, Button, Form, Message } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Link } from 'react-router';
 import * as actions from '../../state/actions/posts';
 import { handleGetMySubreddits } from '../../state/actions/subreddits';
 import Post from './Post';
 import SelectSubreddit from './SelectSubreddit';
+import AuthUrl from '../OAuth/AuthUrl';
 
 class Feed extends Component {
   constructor(props) {
@@ -59,7 +59,7 @@ class Feed extends Component {
       return (
         <Message warning>
           <Message.Header>{header}</Message.Header>
-          <Link to="/oauth">Authorize</Link>
+          <AuthUrl />
         </Message>
       );
     } else {
