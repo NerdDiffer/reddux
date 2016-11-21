@@ -96,3 +96,21 @@ export const checkForAuthToken = () => {
 
   return thunk;
 };
+
+export const handleRequestRefreshToken = () => {
+  const thunk = dispatch => {
+    dispatch({ type: AUTH_IS_FETCHING });
+    const token = refreshTokenStorage.get();
+
+    return accessToken.refresh(token)
+      .then(data => {
+        console.log(data);
+        accessTokenStorage.set(data.access_token);
+        refreshTokenStorage.clear();
+        authToken(dispatch, true);
+        dispatch({ type: AUTH_IS_NOT_FETCHING });
+      });
+  };
+
+  return thunk;
+};
