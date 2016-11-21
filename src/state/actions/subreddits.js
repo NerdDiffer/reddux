@@ -1,4 +1,6 @@
+import { browserHistory } from 'react-router';
 import {
+  AUTH_ERROR,
   SR_SUBSCRIBED_REPLACE_ALL,
   SR_SUBSCRIBED_ADD,
   SR_SUBSCRIBED_REM,
@@ -6,10 +8,18 @@ import {
   SR_NAME_TO_SHOW,
   SR_IS_FETCHING,
   SR_IS_NOT_FETCHING,
+  MSG_ERROR
 } from '../constants/actionTypes';
 import { subreddits } from '../../api';
 
 const { getMySubreddits, getPopularSubreddits, postToSubscription } = subreddits;
+
+const handleAuthError = (dispatch, msg) => {
+  dispatch({ type: SR_IS_NOT_FETCHING });
+  dispatch({ type: AUTH_ERROR });
+  dispatch({ type: MSG_ERROR, payload: msg });
+  browserHistory.push('/oauth');
+};
 
 // index subscriptions (by url) for quick comparison
 const mapSubredditsByUrl = arr => (
@@ -33,7 +43,7 @@ export const handleGetMySubreddits = () => {
         const subscribedTo = mapSubredditsByUrl(children);
         dispatch({ type: SR_SUBSCRIBED_REPLACE_ALL, payload: subscribedTo });
       })
-      .catch(err => err);
+      .catch(err => handleAuthError(dispatch, err.toString()));
   };
 
   return thunk;
@@ -49,7 +59,8 @@ export const handleGetPopularSubreddits = () => {
         dispatch({ type: SR_IS_NOT_FETCHING });
         dispatch({ type: SR_TO_SHOW, payload: children });
         dispatch({ type: SR_NAME_TO_SHOW, payload: 'Popular' });
-      });
+      })
+      .catch(err => handleAuthError(dispatch, err.toString()));
   };
 
   return thunk;
@@ -61,7 +72,8 @@ export const handleSubscribe = ({ url, name }) => {
     const payload = { url, name };
 
     return postToSubscription(params)
-      .then(res => dispatch({ type: SR_SUBSCRIBED_ADD, payload }));
+      .then(res => dispatch({ type: SR_SUBSCRIBED_ADD, payload }))
+      .catch(err => handleAuthError(dispatch, err.toString()));
   };
 
   return thunk;
@@ -72,7 +84,8 @@ export const handleUnsubscribe = ({ url, name }) => {
     const params = { action: 'unsub', sr: name };
 
     return postToSubscription(params)
-      .then(res => dispatch({ type: SR_SUBSCRIBED_REM, payload: url }));
+      .then(res => dispatch({ type: SR_SUBSCRIBED_REM, payload: url }))
+      .catch(err => handleAuthError(dispatch, err.toString()));
   };
 
   return thunk;
