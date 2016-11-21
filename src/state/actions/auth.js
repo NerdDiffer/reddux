@@ -1,5 +1,7 @@
 import { browserHistory } from 'react-router';
 import {
+  AUTH_HAS_TOKEN,
+  AUTH_HAS_NO_TOKEN,
   AUTH_ACCEPT,
   AUTH_DENIAL,
   AUTH_REVOKE,
@@ -13,6 +15,11 @@ import {
 } from './types';
 import { accessToken } from '../../api';
 import { accessTokenStorage, refreshTokenStorage } from '../../utils/storage';
+
+const authToken = (dispatch, hasToken) => {
+  const type = hasToken ? AUTH_HAS_TOKEN : AUTH_HAS_NO_TOKEN;
+  return dispatch({ type });
+};
 
 const authSuccess = (dispatch, msg) => {
   dispatch({ type: AUTH_ACCEPT });
@@ -39,6 +46,7 @@ const handleAuthAccept = (dispatch, code) => {
       dispatch({ type: AUTH_IS_NOT_FETCHING });
       accessTokenStorage.set(data.access_token);
       refreshTokenStorage.set(data.refresh_token);
+      authToken(dispatch, true);
       browserHistory.push('/');
     })
     .catch(err => {
@@ -52,6 +60,7 @@ const handleAuthFailure = (dispatch, error) => {
       accessTokenStorage.clear();
       refreshTokenStorage.clear();
       browserHistory.push('/');
+      authToken(dispatch, false);
       const msg = 'You have denied access';
       return authDenial(dispatch, msg);
     }
@@ -77,4 +86,13 @@ export const handleAuthorization = queryParams => {
       return handleAuthAccept(dispatch, code);
     }
   };
+};
+
+export const checkForAuthToken = () => {
+  const thunk = dispatch => {
+    const hasToken = !!accessTokenStorage.get() || !!refreshTokenStorage.get();
+    authToken(dispatch, hasToken);
+  };
+
+  return thunk;
 };

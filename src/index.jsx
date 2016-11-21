@@ -3,15 +3,10 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { Router, Route, browserHistory } from 'react-router';
 import { configureStore, getInitialState } from './state/store';
-import { AUTH_ACCEPT } from './state/actions/types';
-import { accessTokenStorage } from './utils/storage';
+import { checkForAuthToken } from './state/actions/auth';
 
-const store = configureStore(getInitialState());
-
-const accessToken = accessTokenStorage.get();
-if (!!accessToken) {
-  store.dispatch({ type: AUTH_ACCEPT });
-}
+const store = configureStore();
+store.dispatch(checkForAuthToken());
 
 import App from './components/App';
 import Feed from './components/Feed/List';

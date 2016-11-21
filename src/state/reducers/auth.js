@@ -1,4 +1,6 @@
 import {
+  AUTH_HAS_TOKEN,
+  AUTH_HAS_NO_TOKEN,
   AUTH_ACCEPT,
   AUTH_DENIAL,
   AUTH_REVOKE,
@@ -19,6 +21,18 @@ const AuthReducer = (prevState = {}, action) => {
       return {
         ...prevState,
         isFetching: false
+      };
+    }
+    case AUTH_HAS_TOKEN: {
+      return {
+        ...prevState,
+        hasToken: true
+      };
+    }
+    case AUTH_HAS_NO_TOKEN: {
+      return {
+        ...prevState,
+        hasToken: false
       };
     }
     case AUTH_ACCEPT: {

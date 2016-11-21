@@ -1,3 +1,5 @@
+export const AUTH_HAS_TOKEN = 'AUTH_HAS_TOKEN';
+export const AUTH_HAS_NO_TOKEN = 'AUTH_HAS_NO_TOKEN';
 export const AUTH_ACCEPT = 'AUTH_ACCEPT';
 export const AUTH_DENIAL = 'AUTH_DENIAL';
 export const AUTH_REVOKE = 'AUTH_REVOKE';
