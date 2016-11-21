@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Button } from 'semantic-ui-react';
-import { authUrl, accessToken } from '../../api';
+import { accessToken } from '../../api';
 import { accessTokenStorage, refreshTokenStorage } from '../../utils/storage';
+import AuthUrl from './AuthUrl';
+import RetrieveToken from './RetrieveToken';
 
 class OAuthPanel extends Component {
   constructor(props) {
@@ -40,14 +41,9 @@ class OAuthPanel extends Component {
     const { hasAccessToken, hasRefreshToken } = this.state;
 
     if (!hasAccessToken || !hasRefreshToken) {
-      return (<a href={authUrl}>Authorize Reddit</a>);
+      return (<AuthUrl />);
     } else {
-      return (
-        <Button
-          content="Refresh token"
-          onClick={this.handleRequestRefreshToken}
-        />
-      );
+      return (<RetrieveToken handleClick={this.handleRequestRefreshToken} />);
     }
   }
 
