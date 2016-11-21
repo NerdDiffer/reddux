@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Menu } from 'semantic-ui-react';
 
@@ -54,4 +55,13 @@ class Nav extends Component {
   }
 };
 
-export default Nav;
+const mapStateToProps = ({ auth }) => ({
+  hasToken: auth.hasToken,
+  isAuthorized: auth.isAuthorized
+});
+
+const ConnectedNav = connect(
+  mapStateToProps
+)(Nav);
+
+export default ConnectedNav;
