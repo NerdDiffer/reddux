@@ -3,10 +3,11 @@ import {
   AUTH_HAS_NO_TOKEN,
   AUTH_ACCEPT,
   AUTH_DENIAL,
-  AUTH_REVOKE,
   AUTH_ERROR,
   AUTH_IS_FETCHING,
-  AUTH_IS_NOT_FETCHING
+  AUTH_IS_NOT_FETCHING,
+  AUTH_IS_REVOKING,
+  AUTH_IS_NOT_REVOKING
 } from '../actions/types';
 
 const AuthReducer = (prevState = {}, action) => {
@@ -21,6 +22,18 @@ const AuthReducer = (prevState = {}, action) => {
       return {
         ...prevState,
         isFetching: false
+      };
+    }
+    case AUTH_IS_REVOKING: {
+      return {
+        ...prevState,
+        isRevoking: true
+      };
+    }
+    case AUTH_IS_NOT_REVOKING: {
+      return {
+        ...prevState,
+        isRevoking: false
       };
     }
     case AUTH_HAS_TOKEN: {
@@ -42,7 +55,6 @@ const AuthReducer = (prevState = {}, action) => {
       };
     }
     case AUTH_ERROR:
-    case AUTH_REVOKE:
     case AUTH_DENIAL: {
       return {
         ...prevState,

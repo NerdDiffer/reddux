@@ -4,10 +4,11 @@ import {
   AUTH_HAS_NO_TOKEN,
   AUTH_ACCEPT,
   AUTH_DENIAL,
-  AUTH_REVOKE,
   AUTH_ERROR,
   AUTH_IS_FETCHING,
   AUTH_IS_NOT_FETCHING,
+  AUTH_IS_REVOKING,
+  AUTH_IS_NOT_REVOKING,
   MSG_SUCCESS,
   MSG_INFO,
   MSG_WARNING,
@@ -19,6 +20,11 @@ import { accessTokenStorage, refreshTokenStorage } from '../../utils/storage';
 const authToken = (dispatch, hasToken) => {
   const type = hasToken ? AUTH_HAS_TOKEN : AUTH_HAS_NO_TOKEN;
   return dispatch({ type });
+};
+
+const authRevoking = (dispatch, payload) => {
+  const type = payload ? AUTH_IS_REVOKING : AUTH_IS_NOT_REVOKING;
+  return dispatch({ type, payload });
 };
 
 const authSuccess = (dispatch, msg) => {
@@ -90,7 +96,7 @@ export const handleAuthCallback = queryParams => {
 
 export const checkForAuthToken = () => {
   const thunk = dispatch => {
-    const hasToken = !!accessTokenStorage.get() || !!refreshTokenStorage.get();
+    const hasToken = !!accessTokenStorage.get();
     authToken(dispatch, hasToken);
   };
 
@@ -134,12 +140,12 @@ export const handleRevokeTokens = () => {
       () => accessToken.revoke({ token: refresh_token, tokenType: 'refresh_token' })
     ];
 
-    dispatch({ type: AUTH_IS_FETCHING });
+    authRevoking(dispatch, true);
 
     return Promise.all(promises)
       .then(res => {
-        dispatch({ type: AUTH_IS_NOT_FETCHING });
-        dispatch({ type: AUTH_REVOKE });
+        authRevoking(dispatch, false);
+        dispatch({ type: AUTH_DENIAL });
         accessTokenStorage.clear();
         refreshTokenStorage.clear();
         authToken(dispatch, false);
@@ -147,7 +153,7 @@ export const handleRevokeTokens = () => {
         browserHistory.push('/');
       })
       .catch(err => {
-        dispatch({ type: AUTH_IS_NOT_FETCHING });
+        authRevoking(dispatch, false);
         return authError(dispatch, 'Client credentials invalid');
       })
   };

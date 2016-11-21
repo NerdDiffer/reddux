@@ -38,7 +38,7 @@ class OAuthPanel extends Component {
   }
 
   renderRevokeTokens() {
-    const { hasToken, isFetching } = this.props;
+    const { hasToken, isRevoking } = this.props;
 
     if (!hasToken) {
       return null;
@@ -46,7 +46,7 @@ class OAuthPanel extends Component {
       return (
         <RevokeTokens
           handleClick={this.handleRevokeTokens}
-          loading={isFetching}
+          loading={isRevoking}
         />
       );
     }
@@ -66,7 +66,8 @@ class OAuthPanel extends Component {
 
 const mapStateToProps = ({ auth }) => ({
   hasToken: auth.hasToken,
-  isFetching: auth.isFetching
+  isFetching: auth.isFetching,
+  isRevoking: auth.isRevoking
 });
 
 const mapDispatchToProps = dispatch => (
