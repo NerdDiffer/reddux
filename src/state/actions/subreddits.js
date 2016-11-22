@@ -68,10 +68,10 @@ export const handleGetPopularSubreddits = () => {
   return thunk;
 };
 
-export const handleSubscribe = ({ url, name }) => {
+export const handleSubscribe = ({ url, name, display_name }) => {
   const thunk = dispatch => {
     const params = { action: 'sub', sr: name };
-    const payload = { url, name };
+    const payload = { url, name, display_name };
 
     return postToSubscription(params)
       .then(res => dispatch({ type: SR_SUBSCRIBED_ADD, payload }))

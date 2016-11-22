@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../state/actions/posts';
 import { handleGetMySubreddits } from '../../state/actions/subreddits';
+import { FRONT_PAGE } from '../../state/constants';
 import Post from './Post';
 import SelectSubreddit from './SelectSubreddit';
 import AuthUrl from '../Auth/AuthUrl';
@@ -36,7 +37,7 @@ class Feed extends Component {
   }
 
   handleGetFrontPage() {
-    return this.props.fetchPostsIfNeeded('_front_page');
+    return this.props.fetchPostsIfNeeded(FRONT_PAGE);
   }
 
   handleFetchPosts() {

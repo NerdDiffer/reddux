@@ -29,12 +29,12 @@ class Subreddits extends Component {
     return this.props.handleGetPopularSubreddits();
   }
 
-  handleSubscribe({ url, name }) {
-    return this.props.handleSubscribe({ url, name });
+  handleSubscribe(payload) {
+    return this.props.handleSubscribe(payload);
   }
 
-  handleUnsubscribe({ url, name }) {
-    return this.props.handleUnsubscribe({ url, name });
+  handleUnsubscribe(payload) {
+    return this.props.handleUnsubscribe(payload);
   }
 
   renderHeader() {
@@ -57,13 +57,14 @@ class Subreddits extends Component {
         <Item.Group divided>
           {
             collectionToShow.map(({ data }, ind) => {
-              const { url, name } = data;
+              const { url, name, display_name } = data;
+              const payload = { url, name, display_name };
               // Keep the `isSubscribed` variable in case there are sync issues
               const isSubscribed = subscribedTo.hasOwnProperty(url);
 
               const handleSubscription = isSubscribed ?
-                this.handleUnsubscribe.bind(null, { url, name }) :
-                this.handleSubscribe.bind(null, { url, name });
+                this.handleUnsubscribe.bind(null, payload) :
+                this.handleSubscribe.bind(null, payload);
 
               return (
                 <Subreddit

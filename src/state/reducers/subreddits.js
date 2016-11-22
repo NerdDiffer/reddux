@@ -7,21 +7,26 @@ import {
   SR_IS_FETCHING,
   SR_IS_NOT_FETCHING,
 } from '../constants/actionTypes';
+import { FRONT_PAGE } from '../constants';
 
 const SubredditsReducer = (prevState = {}, action) => {
   switch(action.type) {
     case SR_SUBSCRIBED_REPLACE_ALL: {
       return {
         ...prevState,
-        subscribedTo: action.payload
+        subscribedTo: {
+          [FRONT_PAGE]: { name: FRONT_PAGE, display_name: FRONT_PAGE },
+          ...action.payload
+        }
       };
     }
     case SR_SUBSCRIBED_ADD: {
-      const { url, name } = action.payload;
+      const { url, name, display_name } = action.payload;
 
       const newSubscribedTo = {
+        [FRONT_PAGE]: { name: FRONT_PAGE, display_name: FRONT_PAGE },
         ...prevState.subscribedTo,
-        [url]: name
+        [url]: { name, display_name }
       };
 
       return {
