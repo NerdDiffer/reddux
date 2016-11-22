@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, Button, Form, Message } from 'semantic-ui-react';
+import { Icon, Button, Form, Message, Item } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../state/actions/posts';
@@ -99,7 +99,11 @@ class Feed extends Component {
     if (!items) {
       return null;
     } else {
-      return items.map((data, ind) => <Post data={data} key={ind} />);
+      return (
+        <Item.Group divided>
+          {items.map((data, ind) => <Post data={data} key={ind} />)}
+        </Item.Group>
+      );
     }
   }
 
