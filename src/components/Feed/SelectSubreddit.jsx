@@ -1,6 +1,17 @@
 import React, { Component, PropTypes } from 'react';
 import { Dropdown } from 'semantic-ui-react';
 
+const buildDropdownOptions = mySubs => {
+  const options = [];
+
+  for (const url in mySubs) {
+    const sr_display_name = mySubs[url].display_name;
+    options.push({ value: sr_display_name, text: sr_display_name });
+  }
+
+  return options;
+}
+
 class SelectSubreddit extends Component {
   constructor(props) {
     super(props);
@@ -13,44 +24,28 @@ class SelectSubreddit extends Component {
     return this.props.selectSubreddit(sr_display_name);
   }
 
-  buildDropdownOptions() {
-    const { mySubs } = this.props;
-
-    const options = [];
-
-    for (const url in mySubs) {
-      const sr_display_name = mySubs[url].display_name;
-      options.push({ value: sr_display_name, text: sr_display_name });
-    }
-
-    return options;
-  }
-
-  renderDropdown() {
+  render() {
     const { mySubs, selectedSub } = this.props;
 
     if (!mySubs) {
       return null;
     } else {
+      const options = buildDropdownOptions(mySubs);
+
       return (
         <Dropdown
           text="Select Subreddit"
           name="selectSubredditDropdown"
           search
-          onChange={this.handleChange}
+          labeled
+          button
+          className="icon"
           value={selectedSub}
-          options={this.buildDropdownOptions()}
+          options={options}
+          onChange={this.handleChange}
         />
       );
     }
-  }
-
-  render() {
-    return (
-      <span>
-        {this.renderDropdown()}
-      </span>
-    )
   }
 }
 
