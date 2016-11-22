@@ -3,6 +3,7 @@ import { Button } from 'semantic-ui-react';
 
 const RevokeTokens = ({ handleClick, loading }) => (
   <Button
+    icon="sign out"
     content="Revoke token"
     loading={loading}
     onClick={handleClick}

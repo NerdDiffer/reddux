@@ -23,20 +23,21 @@ class Nav extends Component {
 
     let menuData;
 
+    const authMenuItem = { name: 'auth', position: 'right', icon: 'protect' }
+
     if (!hasToken) {
-      menuData = [
-        { name: 'auth', position: 'right' }
-      ];
+      menuData = [authMenuItem];
     } else {
       menuData = [
         { name: 'feed' },
         { name: 'subreddits' },
-        { name: 'auth', position: 'right' }
+        authMenuItem
       ];
     }
 
-    return menuData.map(({ name, position }, ind) => (
+    return menuData.map(({ name, position, icon }, ind) => (
       <Menu.Item
+        icon={icon}
         as={Link}
         to={`/${name}`}
         name={name}
