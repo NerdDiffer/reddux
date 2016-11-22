@@ -10,9 +10,11 @@ import {
   SR_IS_NOT_FETCHING,
   MSG_ERROR
 } from '../constants/actionTypes';
-import { subreddits } from '../../api';
-
-const { getMySubreddits, getPopularSubreddits, postToSubscription } = subreddits;
+import {
+  getMySubreddits,
+  getPopularSubreddits,
+  postToSubscription
+} from '../../api/subreddits';
 
 const handleAuthError = (dispatch, msg) => {
   dispatch({ type: SR_IS_NOT_FETCHING });
