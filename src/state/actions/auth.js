@@ -14,7 +14,11 @@ import {
   MSG_WARNING,
   MSG_ERROR
 } from '../constants/actionTypes';
-import { accessToken } from '../../api';
+import {
+  postForAccessToken,
+  postForRefreshToken,
+  postToRevokeToken
+} from '../../api/accessToken';
 import { accessTokenStorage, refreshTokenStorage } from '../../utils/storage';
 
 const authToken = (dispatch, hasToken) => {
@@ -46,7 +50,7 @@ const handleAuthAccept = (dispatch, code) => {
   authSuccess(dispatch, 'You have authorized access');
   dispatch({ type: AUTH_IS_FETCHING });
 
-  return accessToken.retrieve(code)
+  return postForAccessToken(code)
     .then(data => {
       console.log(data);
       dispatch({ type: AUTH_IS_NOT_FETCHING });
@@ -113,7 +117,7 @@ export const handleRequestRefreshToken = () => {
     } else {
       dispatch({ type: AUTH_IS_FETCHING });
 
-      return accessToken.refresh(token)
+      return postForRefreshToken(token)
         .then(data => {
           console.log(data);
           accessTokenStorage.set(data.access_token);
@@ -136,8 +140,8 @@ export const handleRevokeTokens = () => {
     const refresh_token = refreshTokenStorage.get();
 
     const promises = [
-      () => accessToken.revoke({ token: access_token, tokenType: 'access_token' }),
-      () => accessToken.revoke({ token: refresh_token, tokenType: 'refresh_token' })
+      () => postToRevokeToken({ token: access_token, tokenType: 'access_token' }),
+      () => postToRevokeToken({ token: refresh_token, tokenType: 'refresh_token' })
     ];
 
     authRevoking(dispatch, true);

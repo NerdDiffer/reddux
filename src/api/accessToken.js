@@ -18,7 +18,7 @@ const postForToken = params => {
 };
 
 // https://github.com/reddit/reddit/wiki/OAuth2#retrieving-the-access-token
-export const retrieve = code => {
+export const postForAccessToken = code => {
   const params = {
     grant_type: 'authorization_code',
     code,
@@ -29,7 +29,7 @@ export const retrieve = code => {
 };
 
 // https://github.com/reddit/reddit/wiki/OAuth2#refreshing-the-token
-export const refresh = refresh_token => {
+export const postForRefreshToken = refresh_token => {
   const params = {
     grant_type: 'refresh_token',
     refresh_token
@@ -39,7 +39,7 @@ export const refresh = refresh_token => {
 };
 
 // https://github.com/reddit/reddit/wiki/OAuth2#manually-revoking-a-token
-export const revoke = ({ token, tokenType }) => {
+export const postToRevokeToken = ({ token, tokenType }) => {
   const url = 'https://www.reddit.com/api/v1/revoke_token';
   const params = {
     token,
