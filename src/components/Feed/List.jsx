@@ -99,17 +99,7 @@ class Feed extends Component {
     if (!items) {
       return null;
     } else {
-      return items.map((data, ind) => {
-        const { title, url, thumbnail } = data;
-        return (
-          <Post
-            key={ind}
-            title={title}
-            url={url}
-            thumbnail={thumbnail}
-          />
-        );
-      });
+      return items.map((data, ind) => <Post data={data} key={ind} />);
     }
   }
 

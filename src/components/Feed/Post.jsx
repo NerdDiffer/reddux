@@ -12,8 +12,9 @@ const DefaultImage = ({ url }) => (
   </a>
 );
 
-const Post = (props) => {
-  const { thumbnail, url, title } = props;
+// https://github.com/reddit/reddit/wiki/JSON#link-implements-votable--created
+const Post = ({ data }) => {
+  const { thumbnail, url, title } = data;
 
   const renderImage = () => {
     if (thumbnail === 'default') {
