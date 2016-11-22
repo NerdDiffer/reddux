@@ -5,34 +5,30 @@ import { Icon, Button, Form } from 'semantic-ui-react';
 import SelectSubreddit from './SelectSubreddit';
 import * as actions from '../../state/actions/posts';
 import { handleGetMySubreddits } from '../../state/actions/subreddits';
-import { FRONT_PAGE } from '../../state/constants';
 
 class FeedControls extends Component {
   constructor(props) {
     super(props);
 
     this.handleSelectSub = this.handleSelectSub.bind(this);
-    this.handleGetFrontPage = this.handleGetFrontPage.bind(this);
     this.handleFetchPosts = this.handleFetchPosts.bind(this);
     this.handleForceRefresh = this.handleForceRefresh.bind(this);
   }
 
   componentDidMount() {
-    // this.handleFetchPosts()
+    this.handleFetchPosts()
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedSub !== this.props.selectedSub) {
-      this.handleFetchPosts();
+    const { selectedSub: nextSelectedSub } = nextProps;
+
+    if (nextSelectedSub !== this.props.selectedSub) {
+      return this.props.fetchPostsIfNeeded(nextSelectedSub);
     }
   }
 
   handleSelectSub(sr_display_name) {
     return this.props.selectSubreddit(sr_display_name);
-  }
-
-  handleGetFrontPage() {
-    return this.props.fetchPostsIfNeeded(FRONT_PAGE);
   }
 
   handleFetchPosts() {
@@ -60,16 +56,13 @@ class FeedControls extends Component {
           <h3>{selectedSub}</h3>
         </Form.Group>
         <Form.Group>
-          <Button content="getFrontPage" onClick={this.handleGetFrontPage} />
-          <Button content="fetchPosts" onClick={this.handleFetchPosts} />
+          <Button content="Refresh Posts" onClick={this.handleForceRefresh} />
           <br />
           <Icon
             name="refresh"
             size="large"
             color="black"
             loading={this.props.isFetching}
-            link
-            onClick={this.handleForceRefresh}
           />
         </Form.Group>
       </div>
