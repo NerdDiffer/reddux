@@ -16,10 +16,16 @@ import {
   postToSubscription
 } from '../../api/subreddits';
 
-const handleAuthError = (dispatch, msg) => {
+const handleAuthError = (dispatch, err) => {
   dispatch({ type: SR_IS_NOT_FETCHING });
   dispatch({ type: AUTH_ERROR });
-  dispatch({ type: MSG_ERROR, payload: msg });
+  const errorMessage = {
+    header: err.toString(),
+    listItems: ['Try refreshing your auth token.'],
+    content: null
+  };
+
+  dispatch({ type: MSG_ERROR, payload: errorMessage });
   browserHistory.push('/auth');
 };
 
@@ -45,7 +51,7 @@ export const handleGetMySubreddits = () => {
         const subscribedTo = mapSubredditsByUrl(children);
         dispatch({ type: SR_SUBSCRIBED_REPLACE_ALL, payload: subscribedTo });
       })
-      .catch(err => handleAuthError(dispatch, err.toString()));
+      .catch(err => handleAuthError(dispatch, err));
   };
 
   return thunk;
@@ -62,7 +68,7 @@ export const handleGetPopularSubreddits = () => {
         dispatch({ type: SR_TO_SHOW, payload: children });
         dispatch({ type: SR_NAME_TO_SHOW, payload: 'Popular' });
       })
-      .catch(err => handleAuthError(dispatch, err.toString()));
+      .catch(err => handleAuthError(dispatch, err));
   };
 
   return thunk;
@@ -75,7 +81,7 @@ export const handleSubscribe = ({ url, name, display_name }) => {
 
     return postToSubscription(params)
       .then(res => dispatch({ type: SR_SUBSCRIBED_ADD, payload }))
-      .catch(err => handleAuthError(dispatch, err.toString()));
+      .catch(err => handleAuthError(dispatch, err));
   };
 
   return thunk;
@@ -87,7 +93,7 @@ export const handleUnsubscribe = ({ url, name }) => {
 
     return postToSubscription(params)
       .then(res => dispatch({ type: SR_SUBSCRIBED_REM, payload: url }))
-      .catch(err => handleAuthError(dispatch, err.toString()));
+      .catch(err => handleAuthError(dispatch, err));
   };
 
   return thunk;
