@@ -7,7 +7,7 @@
     "node": ">=6.4.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "ava tests/{state,components,utils,api}/{**,**/**}/*_test.js",
     "start": "node index.js",
     "clean": "rm -rf node_modules/ src/styles/dist/ public/build/",
     "build:styles": "cd src/styles/ && gulp build",
@@ -18,7 +18,12 @@
   "author": "Rafael Espinoza <rafael@rafaelespinoza.com> (www.rafaelespinoza.com)",
   "license": "ISC",
   "devDependencies": {
+    "ava": "^0.17.0",
     "cz-conventional-changelog": "^1.2.0",
+    "enzyme": "^2.6.0",
+    "fetch-mock": "^5.5.0",
+    "redux-mock-store": "^1.2.1",
+    "sinon": "^1.17.6",
     "webpack-dev-server": "^1.16.2",
     "webpack-dotenv-plugin": "^1.4.0"
   },
@@ -58,5 +63,22 @@
       "stage-1"
     ],
     "sourceMaps": "inline"
+  },
+  "ava": {
+    "files": [
+      "tests/**/*_test.js"
+    ],
+    "source": [
+      "!src/styles/**/*",
+      "src/*.{js,jsx}"
+    ],
+    "concurrency": 5,
+    "failFast": false,
+    "tap": false,
+    "verbose": true,
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
   }
 }
