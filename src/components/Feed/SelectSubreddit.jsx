@@ -1,5 +1,9 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Dropdown } from 'semantic-ui-react';
+import { selectSubreddit } from '../../state/actions/posts';
+import { handleGetMySubreddits } from '../../state/actions/subreddits';
 
 const buildDropdownOptions = mySubs => {
   const options = [];
@@ -17,6 +21,14 @@ class SelectSubreddit extends Component {
     super(props);
 
     this.handleChange = this.handleChange.bind(this);
+  }
+
+  componentDidMount() {
+    const { mySubs } = this.props;
+
+    if (!mySubs) {
+      this.props.handleGetMySubreddits();
+    }
   }
 
   handleChange(_ev, { name, value }) {
@@ -52,7 +64,24 @@ class SelectSubreddit extends Component {
 SelectSubreddit.propTypes = {
   selectedSub: PropTypes.string,
   mySubs: PropTypes.object,
+  handleGetMySubreddits: PropTypes.func,
   selectSubreddit: PropTypes.func
 };
 
-export default SelectSubreddit;
+const mapStateToProps = ({ subreddits }) => {
+  const { subscribedTo: mySubs } = subreddits;
+
+  return { mySubs };
+};
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  handleGetMySubreddits,
+  selectSubreddit
+}, dispatch);
+
+const ConnectedSelectSubreddit = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SelectSubreddit);
+
+export default ConnectedSelectSubreddit;
