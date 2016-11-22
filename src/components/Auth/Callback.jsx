@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { handleAuthCallback } from '../../state/actions/auth';
 
-class OAuthCallback extends Component {
+class AuthCallback extends Component {
   componentDidMount() {
     const { error, code } = this.props.location.query;
     return this.props.handleAuthCallback({ error, code });
@@ -21,6 +21,6 @@ const mapDispatchToProps = dispatch => (
 const ConnectedCallback = connect(
   null,
   mapDispatchToProps
-)(OAuthCallback);
+)(AuthCallback);
 
 export default ConnectedCallback;

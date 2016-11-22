@@ -20,7 +20,7 @@ class Nav extends Component {
   renderItems(activeItem) {
     const menuItems = [
       { name: 'feed' },
-      { name: 'oauth' },
+      { name: 'auth' },
       { name: 'subreddits' }
     ];
 

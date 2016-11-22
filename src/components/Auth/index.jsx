@@ -6,7 +6,7 @@ import AuthUrl from './AuthUrl';
 import RetrieveToken from './RetrieveToken';
 import RevokeTokens from './RevokeTokens';
 
-class OAuthPanel extends Component {
+class AuthPanel extends Component {
   constructor(props) {
     super(props);
 
@@ -74,9 +74,9 @@ const mapDispatchToProps = dispatch => (
   bindActionCreators({ ...actions }, dispatch)
 );
 
-const ConnectedOAuthPanel = connect(
+const ConnectedAuthPanel = connect(
   mapStateToProps,
   mapDispatchToProps
-)(OAuthPanel);
+)(AuthPanel);
 
-export default ConnectedOAuthPanel;
+export default ConnectedAuthPanel;

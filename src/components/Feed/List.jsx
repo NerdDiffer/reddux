@@ -6,7 +6,7 @@ import * as actions from '../../state/actions/posts';
 import { handleGetMySubreddits } from '../../state/actions/subreddits';
 import Post from './Post';
 import SelectSubreddit from './SelectSubreddit';
-import AuthUrl from '../OAuth/AuthUrl';
+import AuthUrl from '../Auth/AuthUrl';
 
 class Feed extends Component {
   constructor(props) {

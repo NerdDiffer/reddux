@@ -11,15 +11,15 @@ store.dispatch(checkForAuthToken());
 import App from './components/App';
 import Feed from './components/Feed/List';
 import SubredditsList from './components/Subreddits/List';
-import OAuthPanel from './components/OAuth';
-import OAuthCallback from './components/OAuth/Callback';
+import AuthPanel from './components/Auth';
+import AuthCallback from './components/Auth/Callback';
 
 // Route config
 const routes = (
   <Route path="/" component={App}>
     <Route path="/subreddits" component={SubredditsList} />
-    <Route path="/oauth" component={OAuthPanel} />
-    <Route path="/oauth/callback" component={OAuthCallback} />
+    <Route path="/auth" component={AuthPanel} />
+    <Route path="/auth/callback" component={AuthCallback} />
     <Route path="/feed" component={Feed} />
   </Route>
 );
