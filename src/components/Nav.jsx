@@ -19,17 +19,28 @@ class Nav extends Component {
   }
 
   renderItems(activeItem) {
-    const menuItems = [
-      { name: 'feed' },
-      { name: 'auth' },
-      { name: 'subreddits' }
-    ];
+    const { hasToken } = this.props;
 
-    return menuItems.map(({ name }, ind) => (
+    let menuData;
+
+    if (!hasToken) {
+      menuData = [
+        { name: 'auth', position: 'right' }
+      ];
+    } else {
+      menuData = [
+        { name: 'feed' },
+        { name: 'subreddits' },
+        { name: 'auth', position: 'right' }
+      ];
+    }
+
+    return menuData.map(({ name, position }, ind) => (
       <Menu.Item
         as={Link}
         to={`/${name}`}
         name={name}
+        position={position}
         key={ind}
         active={activeItem === name}
         onClick={this.handleItemClick}
@@ -55,10 +66,7 @@ class Nav extends Component {
   }
 };
 
-const mapStateToProps = ({ auth }) => ({
-  hasToken: auth.hasToken,
-  isAuthorized: auth.isAuthorized
-});
+const mapStateToProps = ({ auth }) => ({ hasToken: auth.hasToken });
 
 const ConnectedNav = connect(
   mapStateToProps
