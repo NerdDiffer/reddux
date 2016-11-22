@@ -10,7 +10,7 @@ const authUrl = (() => {
     client_id: process.env.REDDIT_CLIENT_ID,
     response_type: 'code',
     state: 'RANDOM_STRING',
-    redirect_uri: 'http://localhost:8080/oauth/callback',
+    redirect_uri: 'http://localhost:8080/auth/callback',
     duration: 'permanent',
     scope: 'identity mysubreddits read subscribe'
   };

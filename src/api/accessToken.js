@@ -22,7 +22,7 @@ export const retrieve = code => {
   const params = {
     grant_type: 'authorization_code',
     code,
-    redirect_uri: 'http://localhost:8080/oauth/callback'
+    redirect_uri: 'http://localhost:8080/auth/callback'
   };
 
   return postForToken.call(null, params);

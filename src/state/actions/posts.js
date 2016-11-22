@@ -48,7 +48,7 @@ const handleAuthError = (dispatch, sr_display_name, msg) => {
   dispatch({ type: AUTH_ERROR });
   dispatch({ type: MSG_ERROR, payload: msg });
   postsError(dispatch, sr_display_name, msg);
-  browserHistory.push('/oauth');
+  browserHistory.push('/auth');
 };
 
 const fetchPosts = (dispatch, sr_display_name) => {

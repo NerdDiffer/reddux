@@ -18,7 +18,7 @@ const handleAuthError = (dispatch, msg) => {
   dispatch({ type: SR_IS_NOT_FETCHING });
   dispatch({ type: AUTH_ERROR });
   dispatch({ type: MSG_ERROR, payload: msg });
-  browserHistory.push('/oauth');
+  browserHistory.push('/auth');
 };
 
 // index subscriptions (by url) for quick comparison
