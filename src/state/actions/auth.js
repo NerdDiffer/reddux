@@ -141,8 +141,8 @@ export const handleRevokeTokens = () => {
     const refresh_token = refreshTokenStorage.get();
 
     const promises = [
-      () => postToRevokeToken({ token: access_token, tokenType: 'access_token' }),
-      () => postToRevokeToken({ token: refresh_token, tokenType: 'refresh_token' })
+      postToRevokeToken({ token: access_token, tokenType: 'access_token' }),
+      postToRevokeToken({ token: refresh_token, tokenType: 'refresh_token' })
     ];
 
     authRevoking(dispatch, true);
