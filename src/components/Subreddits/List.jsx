@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, Button } from 'semantic-ui-react';
+import { Icon, Button, Item } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../state/actions/subreddits';
@@ -53,26 +53,32 @@ class Subreddits extends Component {
     if (!subscribedTo) {
       return null;
     } else {
-      return collectionToShow.map(({ data }, ind) => {
-        const { title, url, name } = data;
-        const isSubscribed = subscribedTo.hasOwnProperty(url);
+      return (
+        <Item.Group divided>
+          {
+            collectionToShow.map(({ data }, ind) => {
+              const { url, name } = data;
+              // Keep the `isSubscribed` variable in case there are sync issues
+              const isSubscribed = subscribedTo.hasOwnProperty(url);
 
-        const handleSubscription = isSubscribed ?
-          () => this.handleUnsubscribe({ url, name }) :
-          () => this.handleSubscribe({ url, name });
+              const handleSubscription = isSubscribed ?
+                this.handleUnsubscribe.bind(null, { url, name }) :
+                this.handleSubscribe.bind(null, { url, name });
 
-        return (
-          <Subreddit
-            key={ind}
-            title={title}
-            url={url}
-            name={name}
-            isSubscribed={isSubscribed}
-            handleSubscription={handleSubscription}
-          />
-        );
-      });
+              return (
+                <Subreddit
+                  key={ind}
+                  data={data}
+                  isSubscribed={isSubscribed}
+                  handleSubscription={handleSubscription}
+                />
+              );
+            })
+          }
+        </Item.Group>
+      );
     }
+
   }
 
   render() {
