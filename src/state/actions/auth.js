@@ -120,9 +120,10 @@ export const handleRequestRefreshToken = () => {
       return postForRefreshToken(token)
         .then(data => {
           console.log(data);
+          dispatch({ type: AUTH_IS_NOT_FETCHING });
           accessTokenStorage.set(data.access_token);
           authToken(dispatch, true);
-          dispatch({ type: AUTH_IS_NOT_FETCHING });
+          authSuccess(dispatch, 'You have authorized access again');
         })
         .catch(err => {
           dispatch({ type: AUTH_IS_NOT_FETCHING });
