@@ -5,30 +5,50 @@ import {
   MSG_WARNING
 } from '../constants/actionTypes';
 
+const parseMessage = payload => {
+  if (typeof payload === 'string') {
+    return {
+      header: null,
+      listItems: null,
+      content: payload
+    };
+  } else {
+    const { header, listItems, content } = payload;
+
+    return {
+      header,
+      listItems,
+      content
+    };
+  }
+};
+
 const MessagesReducer = (prevState = {}, action) => {
+  const { payload } = action;
+
   switch(action.type) {
     case MSG_SUCCESS: {
       return {
         format: 'success',
-        message: action.payload
+        message: { ...parseMessage(payload) }
       };
     }
     case MSG_ERROR: {
       return {
         format: 'error',
-        message: action.payload
+        message: { ...parseMessage(payload) }
       };
     }
     case MSG_INFO: {
       return {
         format: 'info',
-        message: action.payload
+        message: { ...parseMessage(payload) }
       };
     }
     case MSG_WARNING: {
       return {
         format: 'warning',
-        message: action.payload
+        message: { ...parseMessage(payload) }
       };
     }
     default: {

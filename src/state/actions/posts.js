@@ -63,7 +63,12 @@ const fetchPosts = (dispatch, sr_display_name) => {
       return postsSuccess(dispatch, sr_display_name, json);
     })
     .catch(err => {
-      const errorMessage = err.toString();
+      const errorMessage = {
+        header: err.toString(),
+        listItems: ['Try refreshing your auth token.'],
+        content: null
+      };
+
       return handleAuthError(dispatch, sr_display_name, errorMessage);
     });
 };

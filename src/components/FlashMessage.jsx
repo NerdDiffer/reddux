@@ -2,16 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Message } from 'semantic-ui-react';
 
+const isMessagePresent = ({ message }) => !!message;
+
 class FlashMessage extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { isVisible: !!this.props.message };
+    this.state = { isVisible: isMessagePresent(this.props) };
+
     this.hideMessage = this.hideMessage.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    const willHaveMessage = !!nextProps.message;
+    const willHaveMessage = isMessagePresent(nextProps);
 
     if (willHaveMessage) {
       this.setState({ isVisible: true });
@@ -29,6 +32,7 @@ class FlashMessage extends Component {
       return null;
     } else {
       const { format, message } = this.props;
+      const { header, listItems, content } = message;
 
       return (
         <Message
@@ -37,7 +41,9 @@ class FlashMessage extends Component {
           error={format === 'error'}
           warning={format === 'warning'}
           success={format === 'success'}
-          content={message}
+          header={header}
+          list={listItems}
+          content={content}
         />
       );
     }

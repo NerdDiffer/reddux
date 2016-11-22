@@ -124,10 +124,19 @@ export const handleRequestRefreshToken = () => {
           accessTokenStorage.set(data.access_token);
           authToken(dispatch, true);
           authSuccess(dispatch, 'You have authorized access again');
+          browserHistory.push('/');
         })
         .catch(err => {
           dispatch({ type: AUTH_IS_NOT_FETCHING });
-          return authError(dispatch, err.toString());
+          const msg = {
+            header: err.toString(),
+            listItems: [
+              'Sent an invalid refresh token.',
+              'Try to revoke the token and re-authorize account.'
+            ],
+            content: null
+          };
+          return authError(dispatch, msg);
         });
     }
   };
@@ -155,7 +164,7 @@ export const handleRevokeTokens = () => {
         refreshTokenStorage.clear();
         authToken(dispatch, false);
         dispatch({ type: MSG_INFO, payload: 'You have revoked access to your account' });
-        browserHistory.push('/');
+        browserHistory.push('/auth');
       })
       .catch(err => {
         authRevoking(dispatch, false);
