@@ -7,7 +7,9 @@ import {
   AUTH_IS_FETCHING,
   AUTH_IS_NOT_FETCHING,
   AUTH_IS_REVOKING,
-  AUTH_IS_NOT_REVOKING
+  AUTH_IS_NOT_REVOKING,
+  USER_IS_PREFETCHING,
+  USER_IS_NOT_PREFETCHING
 } from '../constants/actionTypes';
 
 const AuthReducer = (prevState = {}, action) => {
@@ -22,6 +24,18 @@ const AuthReducer = (prevState = {}, action) => {
       return {
         ...prevState,
         isFetching: false
+      };
+    }
+    case USER_IS_PREFETCHING: {
+      return {
+        ...prevState,
+        isPrefetching: true
+      };
+    }
+    case USER_IS_NOT_PREFETCHING: {
+      return {
+        ...prevState,
+        isPrefetching: false
       };
     }
     case AUTH_IS_REVOKING: {

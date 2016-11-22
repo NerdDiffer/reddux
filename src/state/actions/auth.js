@@ -12,7 +12,9 @@ import {
   MSG_SUCCESS,
   MSG_INFO,
   MSG_WARNING,
-  MSG_ERROR
+  MSG_ERROR,
+  USER_IS_PREFETCHING,
+  USER_IS_NOT_PREFETCHING
 } from '../constants/actionTypes';
 import {
   postForAccessToken,
@@ -20,6 +22,9 @@ import {
   postToRevokeToken
 } from '../../api/accessToken';
 import { accessTokenStorage, refreshTokenStorage } from '../../utils/storage';
+import { handleGetMySubreddits, handleGetPopularSubreddits } from './subreddits';
+import { fetchPostsIfNeeded } from './posts';
+import { FRONT_PAGE } from '../constants';
 
 const authToken = (dispatch, hasToken) => {
   const type = hasToken ? AUTH_HAS_TOKEN : AUTH_HAS_NO_TOKEN;
@@ -47,21 +52,44 @@ const authDenial = (dispatch, msg) => {
 };
 
 const handleAuthAccept = (dispatch, code) => {
-  authSuccess(dispatch, 'You have authorized access');
+  authSuccess(dispatch, {
+    header: 'You have authorized access',
+    content: 'Fetching subscriptions & content...'
+  });
   dispatch({ type: AUTH_IS_FETCHING });
 
-  return postForAccessToken(code)
-    .then(data => {
-      console.log(data);
-      dispatch({ type: AUTH_IS_NOT_FETCHING });
-      accessTokenStorage.set(data.access_token);
-      refreshTokenStorage.set(data.refresh_token);
-      authToken(dispatch, true);
-      browserHistory.push('/');
+  const login = () => (
+    postForAccessToken(code)
+      .then(data => {
+        console.log(data);
+        dispatch({ type: AUTH_IS_NOT_FETCHING });
+        accessTokenStorage.set(data.access_token);
+        refreshTokenStorage.set(data.refresh_token);
+        authToken(dispatch, true);
+      })
+      .catch(err => {
+        return authError(dispatch, err);
+      })
+  );
+
+  const loginAndPrefetch = () => (
+    login()
+      .then(() => dispatch({ type: USER_IS_PREFETCHING }))
+      .then(() => dispatch(handleGetMySubreddits()))
+      .then(() => dispatch(handleGetPopularSubreddits()))
+      .then(() => dispatch(fetchPostsIfNeeded(FRONT_PAGE)))
+      .then(() => dispatch({ type: USER_IS_NOT_PREFETCHING }))
+  );
+
+  return loginAndPrefetch()
+    .then(() => {
+      dispatch({
+        type: MSG_SUCCESS,
+        payload: { header: 'Success!', content: 'Enjoy Reddit Reader' }
+      });
+      browserHistory.push('/feed');
     })
-    .catch(err => {
-      return authError(dispatch, err);
-    })
+    .catch(err => console.log(err));
 };
 
 const handleAuthFailure = (dispatch, error) => {
