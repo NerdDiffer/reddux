@@ -23,12 +23,14 @@ class Nav extends Component {
 
     let menuData;
 
-    const authMenuItem = { name: 'auth', position: 'right', icon: 'protect' }
+    const about = { name: 'about' };
+    const authMenuItem = { name: 'auth', position: 'right' };
 
     if (!hasToken) {
-      menuData = [authMenuItem];
+      menuData = [about, authMenuItem];
     } else {
       menuData = [
+        about,
         { name: 'feed' },
         { name: 'subreddits' },
         authMenuItem

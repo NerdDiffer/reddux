@@ -2,11 +2,12 @@ import React from 'react';
 import { Button } from 'semantic-ui-react';
 import { authUrl } from '../../api';
 
-const AuthUrl = () => (
+const AuthUrl = ({ color, content = 'Authorize Reddit Account' }) => (
   <a href={authUrl}>
     <Button
       icon="sign in"
-      content="Authorize Reddit Account"
+      content={content}
+      color={color}
     />
   </a>
 );
