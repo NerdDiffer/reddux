@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Icon, Header } from 'semantic-ui-react';
+import { Icon, Header, Divider } from 'semantic-ui-react';
 import * as actions from '../../state/actions/auth';
 import AuthUrl from './AuthUrl';
+import AuthInfo from './Info';
 import RetrieveToken from './RetrieveToken';
 import RevokeTokens from './RevokeTokens';
 
@@ -65,6 +66,8 @@ class AuthPanel extends Component {
         <br />
         {this.renderLink()}
         {this.renderRevokeTokens()}
+        <Divider section />
+        <AuthInfo />
       </div>
     );
   }
