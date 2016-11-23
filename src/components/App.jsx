@@ -12,7 +12,7 @@ const App = (props) => (
     <Segment>
       <Nav />
       <FlashMessage />
-      <h1>Reddit Reader</h1>
+      <h1>Reddux</h1>
       {props.children}
     </Segment>
   </Container>
