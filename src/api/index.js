@@ -1,7 +1,7 @@
 import * as subreddits from './subreddits';
 import * as feed from './feed';
 import * as accessToken from './accessToken';
-import { stringifyData } from './_shared';
+import { stringifyData, redirect_uri } from './_shared';
 
 // https://github.com/reddit/reddit/wiki/OAuth2#authorization
 const authUrl = (() => {
@@ -10,7 +10,7 @@ const authUrl = (() => {
     client_id: process.env.REDDIT_CLIENT_ID,
     response_type: 'code',
     state: 'RANDOM_STRING',
-    redirect_uri: 'http://localhost:8080/auth/callback',
+    redirect_uri,
     duration: 'permanent',
     scope: 'identity mysubreddits read subscribe'
   };

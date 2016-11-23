@@ -1,4 +1,4 @@
-import { buildAuthorizationHeader, stringifyData, preProcessResponse } from './_shared';
+import { buildAuthorizationHeader, stringifyData, preProcessResponse, redirect_uri } from './_shared';
 
 const buildPostReqConfig = params => ({
   method: 'POST',
@@ -22,7 +22,7 @@ export const postForAccessToken = code => {
   const params = {
     grant_type: 'authorization_code',
     code,
-    redirect_uri: 'http://localhost:8080/auth/callback'
+    redirect_uri
   };
 
   return postForToken.call(null, params);

@@ -21,6 +21,11 @@ if (!isProduction) {
   });
 }
 
+app.get('*', (req, res) => {
+  const pathToIndex = path.join(pathToStaticDir, 'index.html');
+  res.status(200).sendFile(pathToIndex);
+});
+
 const PORT = process.env.PORT || 3001;
 proxyServer.on('error', err => {
   console.log('Could not connect to proxy: ', err);

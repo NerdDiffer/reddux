@@ -27,7 +27,9 @@ module.exports = {
     new ExtractTextPlugin('styles.css'),
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify('production')
+        'NODE_ENV': JSON.stringify('production'),
+        'REDDIT_CLIENT_ID': JSON.stringify(process.env.REDDIT_CLIENT_ID),
+        'REDDIT_SECRET': JSON.stringify(process.env.REDDIT_SECRET)
       }
     }),
     new webpack.optimize.OccurrenceOrderPlugin(),

@@ -1,7 +1,11 @@
 import { stringify } from 'querystring';
 import { accessTokenStorage } from '../utils/storage';
 
-const { REDDIT_CLIENT_ID, REDDIT_SECRET } = process.env;
+const { REDDIT_CLIENT_ID, REDDIT_SECRET, NODE_ENV } = process.env;
+
+export const redirect_uri = NODE_ENV === 'production' ?
+  'https://reddux.herokuapp.com/auth/callback' :
+  'http://localhost:8080/auth/callback';
 
 const buildBearerAuthHeader = () => {
   const token = accessTokenStorage.get();
