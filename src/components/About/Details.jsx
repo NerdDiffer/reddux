@@ -34,7 +34,7 @@ const Details = () => (
         <Card.Header>What does "Reddux" mean?</Card.Header>
         <Card.Description>
           It's a play on words. One, you get to use Reddit. Two, it makes use
-          of <a href="http://www.redux.js.org" target="_blank">Redux</a>, for
+          of <a href="http://redux.js.org" target="_blank">Redux</a>, for
           managing application state.
         </Card.Description>
       </Card.Content>

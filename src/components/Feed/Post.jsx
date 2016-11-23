@@ -15,7 +15,8 @@ import {
 const fallbackImages = {
   self: 'file text outline',
   image: 'image', // no thumbnail provided for the image
-  default: 'linkify'
+  default: 'linkify',
+  nsfw: 'warning'
 };
 
 const renderThumbnail = (thumbnail, url) => {
@@ -32,7 +33,7 @@ const renderThumbnail = (thumbnail, url) => {
 const Post = ({ data }) => {
   const {
     title, thumbnail, subreddit,
-    url, permalink,
+    url, permalink, over_18,
     score, num_comments, likes, selftext
   } = data;
 
@@ -40,6 +41,8 @@ const Post = ({ data }) => {
     <Item>
       <Item.Header>
         {renderThumbnail(thumbnail, url)}
+        <br />
+        {over_18 ? 'nsfw' : null}
         <br />
         <Statistic size="mini" label="net upvotes" value={score} />
       </Item.Header>
