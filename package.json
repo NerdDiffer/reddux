@@ -1,20 +1,26 @@
 {
-  "name": "template-react-redux",
+  "name": "reddux",
   "version": "0.0.0",
-  "description": "",
+  "description": "A reddit reader",
   "main": "index.js",
+  "engines": {
+    "node": ">=6.4.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "clean": "rm -rf node_modules/ src/styles/dist/ public/build/",
-    "build:styles": "cd src/styles/ && gulp build"
+    "build:styles": "cd src/styles/ && gulp build",
+    "build:prod": "NODE_ENV=production node config/build.production.js",
+    "heroku-postbuild": "npm run build:styles && npm run build:prod"
   },
   "keywords": [],
   "author": "Rafael Espinoza <rafael@rafaelespinoza.com> (www.rafaelespinoza.com)",
   "license": "ISC",
   "devDependencies": {
     "cz-conventional-changelog": "^1.2.0",
-    "webpack-dev-server": "^1.16.2"
+    "webpack-dev-server": "^1.16.2",
+    "webpack-dotenv-plugin": "^1.4.0"
   },
   "dependencies": {
     "babel-core": "^6.18.2",
@@ -37,8 +43,7 @@
     "semantic-ui": "^2.2.6",
     "semantic-ui-react": "^0.60.4",
     "snoowrap": "^1.11.2",
-    "webpack": "^1.13.3",
-    "webpack-dotenv-plugin": "^1.4.0"
+    "webpack": "^1.13.3"
   },
   "private": true,
   "config": {
