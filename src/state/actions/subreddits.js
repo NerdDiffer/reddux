@@ -1,10 +1,10 @@
 import { browserHistory } from 'react-router';
 import {
   AUTH_ERROR,
-  SR_SUBSCRIBED_REPLACE_ALL,
-  SR_SUBSCRIBED_ADD,
-  SR_SUBSCRIBED_REM,
-  SR_TO_SHOW,
+  SUBSCRIPTIONS_REPLACE_ALL,
+  SUBSCRIPTIONS_ADD,
+  SUBSCRIPTIONS_REM,
+  SR_RECEIVE,
   SR_NAME_TO_SHOW,
   SR_IS_FETCHING,
   SR_IS_NOT_FETCHING,
@@ -29,13 +29,20 @@ const handleAuthError = (dispatch, err) => {
   browserHistory.push('/auth');
 };
 
-// index subscriptions (by url) for quick comparison
-const mapSubredditsByUrl = arr => (
+/**
+ * Index subreddits & subscriptions by url.
+ * @return, {Object} collection of subreddits & subscriptions
+ */
+const mapSubsByUrl = arr => (
   arr.reduce((collection, { data }) => {
+    const { subreddits, subscriptions } = collection;
     const { url, name, display_name } = data;
-    collection[url] = { fullname: name, display_name };
-    return collection;
-  }, {})
+
+    subreddits[url] = data;
+    subscriptions[url] = { fullname: name, display_name };
+
+    return { subreddits, subscriptions };
+  }, { subreddits: {}, subscriptions: {}})
 );
 
 export const handleGetMySubreddits = () => {
@@ -46,10 +53,12 @@ export const handleGetMySubreddits = () => {
       .then(res => {
         const { children } = res.data;
         dispatch({ type: SR_IS_NOT_FETCHING });
-        dispatch({ type: SR_TO_SHOW, payload: children });
+
+        const { subscriptions, subreddits } = mapSubsByUrl(children);
+
         dispatch({ type: SR_NAME_TO_SHOW, payload: 'My' });
-        const subscribedTo = mapSubredditsByUrl(children);
-        dispatch({ type: SR_SUBSCRIBED_REPLACE_ALL, payload: subscribedTo });
+        dispatch({ type: SR_RECEIVE, payload: subreddits });
+        dispatch({ type: SUBSCRIPTIONS_REPLACE_ALL, payload: subscriptions });
       })
       .catch(err => handleAuthError(dispatch, err));
   };
@@ -65,7 +74,7 @@ export const handleGetPopularSubreddits = () => {
       .then(res => {
         const { children } = res.data;
         dispatch({ type: SR_IS_NOT_FETCHING });
-        dispatch({ type: SR_TO_SHOW, payload: children });
+        dispatch({ type: SR_RECEIVE, payload: children });
         dispatch({ type: SR_NAME_TO_SHOW, payload: 'Popular' });
       })
       .catch(err => handleAuthError(dispatch, err));
@@ -80,7 +89,7 @@ export const handleSubscribe = ({ url, name, display_name }) => {
     const payload = { url, name, display_name };
 
     return postToSubscription(params)
-      .then(res => dispatch({ type: SR_SUBSCRIBED_ADD, payload }))
+      .then(res => dispatch({ type: SUBSCRIPTIONS_ADD, payload }))
       .catch(err => handleAuthError(dispatch, err));
   };
 
@@ -92,7 +101,7 @@ export const handleUnsubscribe = ({ url, name }) => {
     const params = { action: 'unsub', sr: name };
 
     return postToSubscription(params)
-      .then(res => dispatch({ type: SR_SUBSCRIBED_REM, payload: url }))
+      .then(res => dispatch({ type: SUBSCRIPTIONS_REM, payload: url }))
       .catch(err => handleAuthError(dispatch, err));
   };
 
