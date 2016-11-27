@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Icon, Button, Item } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as actions from '../../state/actions/subreddits';
+import * as subredditActions from '../../state/actions/subreddits';
+import * as subscriptionActions from '../../state/actions/subscriptions';
 import Subreddit from './Subreddit';
 
 class Subreddits extends Component {
@@ -10,23 +11,32 @@ class Subreddits extends Component {
     super(props);
 
     this.renderChildren = this.renderChildren.bind(this);
-    this.handleGetMySubreddits = this.handleGetMySubreddits.bind(this);
-    this.handleGetPopularSubreddits = this.handleGetPopularSubreddits.bind(this);
+    this.fetchSubs = this.fetchSubs.bind(this);
 
+    this.handleShowMySubscriptions = this.handleShowMySubscriptions.bind(this);
+    this.handleShowPopularSubs = this.handleShowPopularSubs.bind(this);
     this.handleSubscribe = this.handleSubscribe.bind(this);
     this.handleUnsubscribe = this.handleUnsubscribe.bind(this);
   }
 
   componentDidMount() {
-    // this.handleGetMySubreddits();
+    this.fetchSubs();
   }
 
-  handleGetMySubreddits() {
-    return this.props.handleGetMySubreddits();
+  fetchSubs() {
+    return this.props.handleGetMySubreddits()
+      .then(() => this.props.handleGetPopularSubreddits());
   }
 
-  handleGetPopularSubreddits() {
-    return this.props.handleGetPopularSubreddits();
+  handleShowMySubscriptions() {
+    const { subscriptions } = this.props;
+    const names = Object.keys(subscriptions);
+    this.props.showSubredditCollection(names, 'My');
+  }
+
+  handleShowPopularSubs() {
+    const { popularSubreddits } = this.props;
+    this.props.showSubredditCollection(popularSubreddits, 'Popular');
   }
 
   handleSubscribe(payload) {
@@ -48,34 +58,33 @@ class Subreddits extends Component {
   }
 
   renderChildren() {
-    const { subscribedTo, collectionToShow } = this.props;
+    const { subscriptions, collectionToShow } = this.props;
 
-    if (!subscribedTo) {
+    if (!collectionToShow) {
       return null;
     } else {
+      const subs = collectionToShow.map((subreddit, ind) => {
+        const { url, name, display_name } = subreddit;
+
+        const isSubscribed = subscriptions && subscriptions.hasOwnProperty(display_name);
+
+        const handleSubscription = isSubscribed ?
+          this.handleUnsubscribe.bind(null, { display_name }) :
+          this.handleSubscribe.bind(null, { url, name, display_name });
+
+        return (
+          <Subreddit
+            key={display_name}
+            data={subreddit}
+            isSubscribed={isSubscribed}
+            handleSubscription={handleSubscription}
+          />
+        );
+      });
+
       return (
         <Item.Group divided>
-          {
-            collectionToShow.map(({ data }, ind) => {
-              const { url, name, display_name } = data;
-              const payload = { url, name, display_name };
-              // Keep the `isSubscribed` variable in case there are sync issues
-              const isSubscribed = subscribedTo.hasOwnProperty(url);
-
-              const handleSubscription = isSubscribed ?
-                this.handleUnsubscribe.bind(null, payload) :
-                this.handleSubscribe.bind(null, payload);
-
-              return (
-                <Subreddit
-                  key={ind}
-                  data={data}
-                  isSubscribed={isSubscribed}
-                  handleSubscription={handleSubscription}
-                />
-              );
-            })
-          }
+          {subs}
         </Item.Group>
       );
     }
@@ -88,8 +97,8 @@ class Subreddits extends Component {
     return(
       <div className="subreddits">
         <h2>Subreddits</h2>
-        <Button content="getMySubreddits" onClick={this.handleGetMySubreddits} />
-        <Button content="getPopularSubreddits" onClick={this.handleGetPopularSubreddits} />
+        <Button content="my subscriptions" onClick={this.handleShowMySubscriptions} />
+        <Button content="popular subreddits" onClick={this.handleShowPopularSubs} />
         <br />
         <Icon
           name="refresh"
@@ -104,9 +113,16 @@ class Subreddits extends Component {
   }
 }
 
-const mapStateToProps = ({ subreddits }) => ({ ...subreddits });
+const mapStateToProps = ({ subreddits, lists }) => {
+  return { ...subreddits, ...lists };
+};
 
-const mapDispatchToProps = dispatch => bindActionCreators({ ...actions }, dispatch);
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({
+    ...subredditActions,
+    ...subscriptionActions
+  }, dispatch)
+);
 
 const ConnectedSubreddits = connect(
   mapStateToProps,

@@ -8,9 +8,8 @@ import { handleGetMySubreddits } from '../../state/actions/subreddits';
 const buildDropdownOptions = mySubs => {
   const options = [];
 
-  for (const url in mySubs) {
-    const sr_display_name = mySubs[url].display_name;
-    options.push({ value: sr_display_name, text: sr_display_name });
+  for (const key in mySubs) {
+    options.push({ value: key, text: key });
   }
 
   return options;
@@ -68,8 +67,8 @@ SelectSubreddit.propTypes = {
   selectSubreddit: PropTypes.func
 };
 
-const mapStateToProps = ({ subreddits }) => {
-  const { subscribedTo: mySubs } = subreddits;
+const mapStateToProps = ({ lists }) => {
+  const { subscriptions: mySubs } = lists;
 
   return { mySubs };
 };
