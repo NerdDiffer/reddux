@@ -1,5 +1,6 @@
 import {
   SR_RECEIVE,
+  SR_COLLECTION,
   SR_NAME_TO_SHOW,
   SR_IS_FETCHING,
   SR_IS_NOT_FETCHING,
@@ -8,6 +9,17 @@ import {
 const SubredditsReducer = (prevState = {}, action) => {
   switch(action.type) {
     case SR_RECEIVE: {
+      const updatedCollection = {
+        ...prevState.allSubs,
+        ...action.payload
+      };
+
+      return {
+        ...prevState,
+        allSubs: updatedCollection
+      };
+    }
+    case SR_COLLECTION: {
       return {
         ...prevState,
         collectionToShow: action.payload

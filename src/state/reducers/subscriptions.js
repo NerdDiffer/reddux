@@ -11,7 +11,9 @@ const SubscriptionsReducer = (prevState = {}, action) => {
       return {
         ...prevState,
         subscribedTo: {
-          [FRONT_PAGE]: { name: FRONT_PAGE, display_name: FRONT_PAGE },
+          // TODO: figure out how to get the front page into the Dropdown menu
+          // of Feed/SelectSubreddit
+          // [FRONT_PAGE]: { name: FRONT_PAGE, display_name: FRONT_PAGE },
           ...action.payload
         }
       };
@@ -20,7 +22,9 @@ const SubscriptionsReducer = (prevState = {}, action) => {
       const { url, name, display_name } = action.payload;
 
       const newSubscribedTo = {
-        [FRONT_PAGE]: { name: FRONT_PAGE, display_name: FRONT_PAGE },
+        // TODO: figure out how to get the front page into the Dropdown menu
+        // of Feed/SelectSubreddit
+        // [FRONT_PAGE]: { name: FRONT_PAGE, display_name: FRONT_PAGE },
         ...prevState.subscribedTo,
         [display_name]: { name, url }
       };

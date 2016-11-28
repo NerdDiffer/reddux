@@ -5,6 +5,7 @@ import {
   SUBSCRIPTIONS_ADD,
   SUBSCRIPTIONS_REM,
   SR_RECEIVE,
+  SR_COLLECTION,
   SR_NAME_TO_SHOW,
   SR_IS_FETCHING,
   SR_IS_NOT_FETCHING,
@@ -31,41 +32,57 @@ const handleAuthError = (dispatch, err) => {
 
 /**
  * Index subreddits & subscriptions by url.
- * @param options, {Object} named options
- *   @param subredditsOnly, {Boolean} if false, will only map subreddits.
- *   otherwise, maps both subscriptions and subreddits.
  * @return, {Object} collection of subreddits & subscriptions
  */
-const mapSubsByDisplayName = (arr, { subredditsOnly = false } = {}) => {
-  let init;
-  let buildSubs;
+const mapSubsByDisplayName = arr => {
+  const init = { subreddits: {}, subscriptions: {} };
+  const buildSubs = (collection, { data }) => {
+    const { subreddits, subscriptions } = collection;
+    const { url, name, display_name } = data;
 
-  if (subredditsOnly) {
-    init = { subreddits: {} };
-    buildSubs = (collection, { data }) => {
-      const { subreddits } = collection;
-      const { display_name } = data;
-      subreddits[display_name] = data;
-      return { subreddits };
-    };
-  } else {
-    init = { subreddits: {}, subscriptions: {} };
-    buildSubs = (collection, { data }) => {
-      const { subreddits, subscriptions } = collection;
-      const { url, name, display_name } = data;
+    subreddits[display_name] = data;
+    subscriptions[display_name] = { name, url };
 
-      subreddits[display_name] = data;
-      subscriptions[display_name] = { name, url };
-
-      return { subreddits, subscriptions };
-    };
-  }
+    return { subreddits, subscriptions };
+  };
 
   return arr.reduce(buildSubs, init);
 };
 
+const mapPopularSubs = arr => {
+  const init = { subreddits: {}, names: [] };
+
+  const buildSubs = (collection, { data }) => {
+    const { subreddits, names } = collection;
+    const { display_name } = data;
+
+    subreddits[display_name] = data;
+    names.push(display_name);
+
+    return { subreddits, names };
+  };
+
+  return arr.reduce(buildSubs, init);
+};
+
+export const showSubredditCollection = (namesBasedOn, nameOfCollection) => {
+  const thunk = (dispatch, getState) => {
+    dispatch({ type: SR_NAME_TO_SHOW, payload: nameOfCollection });
+
+    const allSubs = getState().subreddits.allSubs;
+
+    const collectionToShow = namesBasedOn.map(display_name => {
+      return allSubs[display_name];
+    }, []);
+
+    dispatch({ type: SR_COLLECTION, payload: collectionToShow });
+  };
+
+  return thunk;
+};
+
 export const handleGetMySubreddits = () => {
-  const thunk = dispatch => {
+  const thunk = (dispatch, getState) => {
     dispatch({ type: SR_IS_FETCHING });
 
     return getMySubreddits()
@@ -75,9 +92,12 @@ export const handleGetMySubreddits = () => {
 
         const { subscriptions, subreddits } = mapSubsByDisplayName(children);
 
-        dispatch({ type: SR_NAME_TO_SHOW, payload: 'My' });
         dispatch({ type: SR_RECEIVE, payload: subreddits });
         dispatch({ type: SUBSCRIPTIONS_REPLACE_ALL, payload: subscriptions });
+      })
+      .then(() => {
+        const names = Object.keys(getState().subscriptions.subscribedTo);
+        dispatch(showSubredditCollection(names, 'My'));
       })
       .catch(err => handleAuthError(dispatch, err));
   };
@@ -94,9 +114,12 @@ export const handleGetPopularSubreddits = () => {
         const { children } = res.data;
         dispatch({ type: SR_IS_NOT_FETCHING });
 
-        const { subreddits } = mapSubsByDisplayName(children, { subredditsOnly: true });
-        dispatch({ type: SR_NAME_TO_SHOW, payload: 'Popular' });
+        const { subreddits, names } = mapPopularSubs(children);
         dispatch({ type: SR_RECEIVE, payload: subreddits });
+        return names;
+      })
+      .then(namesOfPopularSubs => {
+        dispatch(showSubredditCollection(namesOfPopularSubs, 'Popular'));
       })
       .catch(err => handleAuthError(dispatch, err));
   };
