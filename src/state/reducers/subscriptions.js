@@ -22,7 +22,7 @@ const SubscriptionsReducer = (prevState = {}, action) => {
       const newSubscribedTo = {
         [FRONT_PAGE]: { name: FRONT_PAGE, display_name: FRONT_PAGE },
         ...prevState.subscribedTo,
-        [url]: { name, display_name }
+        [display_name]: { name, url }
       };
 
       return {
