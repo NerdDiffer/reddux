@@ -2,8 +2,6 @@ import { browserHistory } from 'react-router';
 import {
   AUTH_ERROR,
   SUBSCRIPTIONS_REPLACE_ALL,
-  SUBSCRIPTIONS_ADD,
-  SUBSCRIPTIONS_REM,
   SR_RECEIVE,
   SR_COLLECTION,
   SR_NAME_TO_SHOW,
@@ -121,31 +119,6 @@ export const handleGetPopularSubreddits = () => {
       .then(namesOfPopularSubs => {
         dispatch(showSubredditCollection(namesOfPopularSubs, 'Popular'));
       })
-      .catch(err => handleAuthError(dispatch, err));
-  };
-
-  return thunk;
-};
-
-export const handleSubscribe = ({ url, name, display_name }) => {
-  const thunk = dispatch => {
-    const params = { action: 'sub', sr_name: display_name };
-    const payload = { url, name, display_name };
-
-    return postToSubscription(params)
-      .then(res => dispatch({ type: SUBSCRIPTIONS_ADD, payload }))
-      .catch(err => handleAuthError(dispatch, err));
-  };
-
-  return thunk;
-};
-
-export const handleUnsubscribe = ({ display_name }) => {
-  const thunk = dispatch => {
-    const params = { action: 'unsub', sr_name: display_name };
-
-    return postToSubscription(params)
-      .then(res => dispatch({ type: SUBSCRIPTIONS_REM, payload: display_name }))
       .catch(err => handleAuthError(dispatch, err));
   };
 
