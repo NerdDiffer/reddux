@@ -2,8 +2,9 @@ import { browserHistory } from 'react-router';
 import {
   AUTH_ERROR,
   SUBSCRIPTIONS_REPLACE_ALL,
+  LISTS_POPULAR_SUBREDDITS,
   SR_RECEIVE,
-  SR_COLLECTION,
+  SR_COLLECTION_TO_SHOW,
   SR_NAME_TO_SHOW,
   SR_IS_FETCHING,
   SR_IS_NOT_FETCHING,
@@ -73,7 +74,7 @@ export const showSubredditCollection = (namesBasedOn, nameOfCollection) => {
       return allSubs[display_name];
     }, []);
 
-    dispatch({ type: SR_COLLECTION, payload: collectionToShow });
+    dispatch({ type: SR_COLLECTION_TO_SHOW, payload: collectionToShow });
   };
 
   return thunk;
@@ -94,7 +95,7 @@ export const handleGetMySubreddits = () => {
         dispatch({ type: SUBSCRIPTIONS_REPLACE_ALL, payload: subscriptions });
       })
       .then(() => {
-        const names = Object.keys(getState().subscriptions.subscribedTo);
+        const names = Object.keys(getState().lists.subscriptions);
         dispatch(showSubredditCollection(names, 'My'));
       })
       .catch(err => handleAuthError(dispatch, err));
@@ -117,6 +118,7 @@ export const handleGetPopularSubreddits = () => {
         return names;
       })
       .then(namesOfPopularSubs => {
+        dispatch({ type: LISTS_POPULAR_SUBREDDITS, payload: namesOfPopularSubs });
         dispatch(showSubredditCollection(namesOfPopularSubs, 'Popular'));
       })
       .catch(err => handleAuthError(dispatch, err));

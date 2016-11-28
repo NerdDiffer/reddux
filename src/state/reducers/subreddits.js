@@ -1,6 +1,6 @@
 import {
   SR_RECEIVE,
-  SR_COLLECTION,
+  SR_COLLECTION_TO_SHOW,
   SR_NAME_TO_SHOW,
   SR_IS_FETCHING,
   SR_IS_NOT_FETCHING,
@@ -19,7 +19,7 @@ const SubredditsReducer = (prevState = {}, action) => {
         allSubs: updatedCollection
       };
     }
-    case SR_COLLECTION: {
+    case SR_COLLECTION_TO_SHOW: {
       return {
         ...prevState,
         collectionToShow: action.payload

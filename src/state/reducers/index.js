@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux'
 import auth from './auth';
 import subreddits from './subreddits';
-import subscriptions from './subscriptions';
+import lists from './lists';
 import messages from './messages';
 import posts from './posts';
 
 const rootReducer = combineReducers({
   auth,
   subreddits,
-  subscriptions,
+  lists,
   messages,
   posts
 })
