@@ -6,7 +6,8 @@ import {
   POSTS_FORCE_REFRESH,
   POSTS_SR_NAME,
   MSG_ERROR,
-  AUTH_ERROR
+  AUTH_ERROR,
+  LISTS_FEED_QUEUE
 } from '../constants/actionTypes';
 import { FRONT_PAGE } from '../constants';
 import { getFrontPage, getPosts } from '../../api/feed';
@@ -25,6 +26,13 @@ export const selectSubreddit = sr_display_name => ({
   type: POSTS_SR_NAME,
   payload: sr_display_name
 });
+
+export const updateFeedQueue = feedQueue => {
+  const thunk = dispatch => {
+    dispatch({ type: LISTS_FEED_QUEUE, payload: feedQueue });
+  };
+  return thunk;
+};
 
 const postsSuccess = (dispatch, sr_display_name, json) => {
   return dispatch({

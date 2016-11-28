@@ -2,7 +2,10 @@ import {
   SUBSCRIPTIONS_REPLACE_ALL,
   SUBSCRIPTIONS_ADD,
   SUBSCRIPTIONS_REM,
-  LISTS_POPULAR_SUBREDDITS
+  LISTS_POPULAR_SUBREDDITS,
+  LISTS_FEED_QUEUE,
+  LISTS_FEED_QUEUE_ADD,
+  LISTS_FEED_QUEUE_REM
 } from '../constants/actionTypes';
 import { FRONT_PAGE } from '../constants';
 
@@ -41,7 +44,37 @@ const SubscriptionsReducer = (prevState = {}, action) => {
   }
 };
 
-const ListsReducer = (prevState = { subscriptions: {}, popularSubreddits: {} }, action) => {
+const FeedQueueReducer = (prevState = [], action) => {
+  switch(action.type) {
+    case LISTS_FEED_QUEUE: {
+      return [ ...action.payload ];
+    }
+    case LISTS_FEED_QUEUE_ADD: {
+      return [
+        ...prevState.slice(0, action.index),
+        action.name,
+        ...prevState.slice(action.index)
+      ];
+    }
+    case LISTS_FEED_QUEUE_REM: {
+      return [
+        ...prevState.slice(0, action.index),
+        ...prevState.slice(action.index + 1)
+      ];
+    }
+    default: {
+      return prevState;
+    }
+  }
+};
+
+const getFallbackState = () => ({
+  subscriptions: {},
+  popularSubreddits: [],
+  feedQueue: []
+});
+
+const ListsReducer = (prevState = getFallbackState(), action) => {
   switch(action.type) {
     case SUBSCRIPTIONS_REPLACE_ALL:
     case SUBSCRIPTIONS_ADD:
@@ -49,6 +82,14 @@ const ListsReducer = (prevState = { subscriptions: {}, popularSubreddits: {} }, 
       return {
         ...prevState,
         subscriptions: SubscriptionsReducer(prevState.subscriptions, action)
+      };
+    }
+    case LISTS_FEED_QUEUE_ADD:
+    case LISTS_FEED_QUEUE_REM:
+    case LISTS_FEED_QUEUE: {
+      return {
+        ...prevState,
+        feedQueue: FeedQueueReducer(prevState.feedQueue, action)
       };
     }
     case LISTS_POPULAR_SUBREDDITS: {
