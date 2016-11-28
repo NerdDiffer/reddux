@@ -20,7 +20,11 @@ class Subreddits extends Component {
   }
 
   componentDidMount() {
-    this.fetchSubs();
+    const { subscriptions, popularSubreddits } = this.props;
+
+    if (Object.keys(subscriptions).length < 1 || Object.keys(popularSubreddits).length < 1) {
+      this.fetchSubs();
+    }
   }
 
   fetchSubs() {
