@@ -7,7 +7,9 @@ import {
   POSTS_SR_NAME,
   MSG_ERROR,
   AUTH_ERROR,
-  LISTS_FEED_QUEUE
+  LISTS_FEED_QUEUE,
+  POSTS_MULTIPLE_MODE_ON,
+  POSTS_MULTIPLE_MODE_OFF
 } from '../constants/actionTypes';
 import { FRONT_PAGE } from '../constants';
 import { getFrontPage, getPosts } from '../../api/feed';
@@ -26,6 +28,17 @@ export const selectSubreddit = sr_display_name => ({
   type: POSTS_SR_NAME,
   payload: sr_display_name
 });
+
+export const toggleMultipleMode = () => {
+  const thunk = (dispatch, getState) => {
+    const { isMultipleMode } = getState().posts;
+    const type = isMultipleMode ? POSTS_MULTIPLE_MODE_OFF : POSTS_MULTIPLE_MODE_ON;
+
+    return dispatch({ type });
+  };
+
+  return thunk;
+};
 
 export const updateFeedQueue = feedQueue => {
   const thunk = dispatch => {

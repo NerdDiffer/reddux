@@ -3,7 +3,9 @@ import {
   POSTS_SUCCESS,
   POSTS_ERROR,
   POSTS_FORCE_REFRESH,
-  POSTS_SR_NAME
+  POSTS_SR_NAME,
+  POSTS_MULTIPLE_MODE_ON,
+  POSTS_MULTIPLE_MODE_OFF,
 } from '../constants/actionTypes';
 
 const fallbackState = {
@@ -54,7 +56,15 @@ const postsForSub = (prevState = fallbackState, action) => {
 const PostsReducer = (prevState = {}, action) => {
   switch (action.type) {
     case POSTS_SR_NAME: {
-      const newState = { selectedSub: action.payload };
+      const newState = { selectedSub: action.payload, isMultipleMode: false };
+      return Object.assign({}, prevState, newState);
+    }
+    case POSTS_MULTIPLE_MODE_ON: {
+      const newState = { isMultipleMode: true };
+      return Object.assign({}, prevState, newState);
+    }
+    case POSTS_MULTIPLE_MODE_OFF: {
+      const newState = { isMultipleMode: false };
       return Object.assign({}, prevState, newState);
     }
     case POSTS_FORCE_REFRESH:
