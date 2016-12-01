@@ -8,6 +8,7 @@ import {
   MSG_ERROR,
   AUTH_ERROR,
   LISTS_FEED_QUEUE,
+  LISTS_FEED_REPLACE_ALL,
   POSTS_MULTIPLE_MODE_ON,
   POSTS_MULTIPLE_MODE_OFF
 } from '../constants/actionTypes';
@@ -146,3 +147,26 @@ export const forceRefresh = sr_display_name => ({
   type: POSTS_FORCE_REFRESH,
   sr_display_name
 });
+
+// fetch posts from every subreddit in the `feedQueue`
+export const fetchBulk = () => {
+  const thunk = (dispatch, getState) => {
+    const { feedQueue } = getState().lists;
+
+    const promises = feedQueue.map(display_name => dispatch(fetchPostsIfNeeded(display_name)));
+
+    return Promise.all(promises)
+      .then(results => {
+        const currentState = getState().posts;
+
+        return feedQueue.map(display_name => {
+          return currentState[display_name].items;
+        });
+      })
+      .then(allItems => {
+        const flattened = allItems.reduce((flat, items) => (flat.concat(items)), []);
+        dispatch({ type: LISTS_FEED_REPLACE_ALL, payload: flattened });
+      });
+  };
+  return thunk;
+};

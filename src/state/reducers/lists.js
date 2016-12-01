@@ -5,7 +5,8 @@ import {
   LISTS_POPULAR_SUBREDDITS,
   LISTS_FEED_QUEUE,
   LISTS_FEED_QUEUE_ADD,
-  LISTS_FEED_QUEUE_REM
+  LISTS_FEED_QUEUE_REM,
+  LISTS_FEED_REPLACE_ALL
 } from '../constants/actionTypes';
 import { FRONT_PAGE } from '../constants';
 
@@ -71,7 +72,8 @@ const FeedQueueReducer = (prevState = [], action) => {
 const getFallbackState = () => ({
   subscriptions: {},
   popularSubreddits: [],
-  feedQueue: []
+  feedQueue: [],
+  feed: { items: [] }
 });
 
 const ListsReducer = (prevState = getFallbackState(), action) => {
@@ -90,6 +92,12 @@ const ListsReducer = (prevState = getFallbackState(), action) => {
       return {
         ...prevState,
         feedQueue: FeedQueueReducer(prevState.feedQueue, action)
+      };
+    }
+    case LISTS_FEED_REPLACE_ALL: {
+      return {
+        ...prevState,
+        feed: { items: action.payload }
       };
     }
     case LISTS_POPULAR_SUBREDDITS: {
