@@ -35,20 +35,21 @@ class Feed extends Component {
   }
 }
 
-const mapStateToProps = ({ posts = {} }) => {
-  const { selectedSub } = posts;
+const mapStateToProps = ({ posts, feed, lists }) => {
+  const { source, isMultipleMode } = feed;
 
-  const postsInSelectedSub = posts[selectedSub] || {
-    items: [],
-    errorMessage: null
-  };
+  let items;
 
-  const { items, errorMessage } = postsInSelectedSub;
+  if (isMultipleMode) {
+    items = feed.items;
+  } else {
+    const stateAtSource = posts[source] || { items: [] };
+    items = stateAtSource.items;
+  }
 
   return {
-    selectedSub,
-    items,
-    errorMessage
+    source,
+    items
   };
 };
 

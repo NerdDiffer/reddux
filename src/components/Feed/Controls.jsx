@@ -18,32 +18,61 @@ class FeedControls extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { selectedSub: nextSelectedSub } = nextProps;
+    const { source: nextSource, isMultipleMode: willBeMultipleMode } = nextProps;
 
-    if (nextSelectedSub !== this.props.selectedSub) {
-      return this.props.fetchPostsIfNeeded(nextSelectedSub);
+    if (!willBeMultipleMode && nextSource !== this.props.source) {
+      return this.props.fetchPostsIfNeeded(nextSource);
     }
+    // TODO: add conditions to detect change when in multiple mode (source is array)
   }
 
   handleFetchPosts() {
-    const { selectedSub } = this.props;
-    return this.props.fetchPostsIfNeeded(selectedSub);
+    const { source } = this.props;
+    return this.props.fetchPostsIfNeeded(source);
   }
 
   handleForceRefresh() {
-    const { selectedSub } = this.props;
-    this.props.forceRefresh(selectedSub);
-    return this.props.fetchPostsIfNeeded(selectedSub);
+    const { isMultipleMode } = this.props;
+
+    if (isMultipleMode) {
+      const { feedQueue } = this.props;
+
+      const promises = feedQueue.map(sr_name => this.props.forceRefresh(sr_name));
+
+      Promise.all(promises)
+        .then(results => {
+          return this.props.fetchBulk();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      const { source } = this.props;
+      this.props.forceRefresh(source);
+      return this.props.fetchPostsIfNeeded(source);
+    }
+  }
+
+  renderHeader() {
+    const { source, isMultipleMode, feedQueue } = this.props;
+
+    let content;
+
+    if (isMultipleMode) {
+      content = feedQueue.join(', ');
+    } else {
+      content = source;
+    }
+
+    return (<h3>{content}</h3>)
   }
 
   render () {
-    const { selectedSub } = this.props;
-
     return (
       <div className="feed controls">
         <Form.Group>
-          <SelectSubreddit selectedSub={selectedSub} />
-          <h3>{selectedSub}</h3>
+          <SelectSubreddit />
+          {this.renderHeader()}
         </Form.Group>
         <Form.Group>
           <Button content="Refresh Posts" onClick={this.handleForceRefresh} />
@@ -52,7 +81,6 @@ class FeedControls extends Component {
             name="refresh"
             size="large"
             color="black"
-            loading={this.props.isFetching}
           />
         </Form.Group>
       </div>
@@ -60,25 +88,15 @@ class FeedControls extends Component {
   }
 }
 
-const mapStateToProps = ({ posts = {} }) => {
-  const { selectedSub } = posts;
-
-  const postsInSelectedSub = posts[selectedSub] || {
-    isFetching: false,
-    errorMessage: null
-  };
-
-  const {
-    isFetching,
-    errorMessage,
-    lastUpdated
-  } = postsInSelectedSub;
+const mapStateToProps = ({ posts, feed, lists }) => {
+  const { source, isMultipleMode } = feed;
+  const { feedQueue } = lists;
 
   return {
-    selectedSub,
-    isFetching,
-    errorMessage,
-    lastUpdated
+    source,
+    // isFetching, TODO: figure out how to do `isFetching` for multiple sources
+    isMultipleMode,
+    feedQueue
   };
 };
 
