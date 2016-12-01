@@ -4,7 +4,7 @@ import {
   POSTS_SUCCESS,
   POSTS_ERROR,
   POSTS_FORCE_REFRESH,
-  POSTS_SR_NAME,
+  POSTS_SOURCE,
   MSG_ERROR,
   AUTH_ERROR,
   LISTS_FEED_QUEUE,
@@ -24,10 +24,31 @@ import { getFrontPage, getPosts } from '../../api/feed';
  * of reddit, or some other content entity with the same name...
  */
 
-export const selectSubreddit = sr_display_name => ({
-  type: POSTS_SR_NAME,
-  payload: sr_display_name
-});
+/**
+ * Select a source for posts.
+ * @param source, {Array|String} The source to fetch & show subreddits
+ *   if it's an array, it implies you're in multiple mode
+ *   if it's a string, it implies you're in single mode
+ */
+export const selectSource = source => {
+  const thunk = (dispatch, getState) => {
+    const { isMultipleMode } = getState().posts;
+
+    if (isMultipleMode && typeof source === 'string') {
+      const payload = 'You are in multiple mode, but tried to set posts source as you were in single mode';
+      dispatch({ type: MSG_ERROR, payload });
+      Promise.reject(payload);
+    } else if (!isMultipleMode && Array.isArray(source)) {
+      const payload = 'You are in single mode, but tried to set posts source as you were in multiple mode';
+      dispatch({ type: MSG_ERROR, payload });
+      Promise.reject(payload);
+    } else {
+      dispatch({ type: POSTS_SOURCE, source });
+    }
+  };
+
+  return thunk;
+};
 
 export const toggleMultipleMode = () => {
   const thunk = (dispatch, getState) => {
