@@ -51,18 +51,60 @@ export const selectSource = source => {
   return thunk;
 };
 
+export const replaceFeedItems = () => {
+  const thunk = (dispatch, getState) => {
+    const { feed, lists, posts } = getState();
+    const { isMultipleMode, source } = feed;
+
+    if (!isMultipleMode) {
+      const stateAtSource = posts[source];
+      const payload = stateAtSource.items;
+      dispatch({ type: LISTS_FEED_REPLACE_ALL, payload });
+    } else {
+      const { feedQueue } = lists;
+
+      // extract downloaded posts from each currently-selected subreddit
+      const allItems = feedQueue.map(display_name => posts[display_name].items);
+
+      // combine into one array. TODO: later, order them differently.
+      // You could sort them in a separate action creator, or sort them 'live'
+      // (insertion sort?) as you are extracting items from `posts` branch of state.
+      const payload = allItems.reduce((flat, items) => (flat.concat(items)), []);
+      dispatch({ type: LISTS_FEED_REPLACE_ALL, payload });
+    }
+  };
+
+  return thunk;
+};
+
 export const toggleMultipleMode = () => {
   const thunk = (dispatch, getState) => {
-    const { isMultipleMode } = getState().feed;
-    const type = isMultipleMode ? POSTS_MULTIPLE_MODE_OFF : POSTS_MULTIPLE_MODE_ON;
+    const { isMultipleMode, source } = getState().feed;
 
-    return dispatch({ type });
+    // by dispatching state-dependent action creators so close together, *might*
+    // have to deal with race conditions...
+    if (isMultipleMode) {
+      dispatch({ type: POSTS_MULTIPLE_MODE_OFF });
+
+      const newSource = source[0] || null;
+      // throws error if previous dispatch is not complete...
+      dispatch(selectSource(newSource));
+    } else {
+      dispatch({ type: POSTS_MULTIPLE_MODE_ON });
+
+      const newSource = [source];
+      // throws error if previous dispatch is not complete...
+      dispatch(selectSource(newSource));
+    }
+
+    dispatch(replaceFeedItems());
   };
 
   return thunk;
 };
 
 export const updateFeedQueue = feedQueue => {
+  // TODO: should `selectSource` be called here as well? Under what conditions?
   const thunk = dispatch => {
     dispatch({ type: LISTS_FEED_QUEUE, payload: feedQueue });
   };
@@ -157,16 +199,11 @@ export const fetchBulk = () => {
 
     return Promise.all(promises)
       .then(results => {
-        const currentState = getState().posts;
-
-        return feedQueue.map(display_name => {
-          return currentState[display_name].items;
-        });
-      })
-      .then(allItems => {
-        const flattened = allItems.reduce((flat, items) => (flat.concat(items)), []);
-        dispatch({ type: LISTS_FEED_REPLACE_ALL, payload: flattened });
+        dispatch(selectSource(feedQueue));
+        dispatch(replaceFeedItems());
+        dispatch(updateFeedQueue([]));
       });
   };
+
   return thunk;
 };
