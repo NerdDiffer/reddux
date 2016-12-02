@@ -1,7 +1,7 @@
 import { FRONT_PAGE } from '../constants';
 
 export default () => ({
-  posts: {
+  feed: {
     source: FRONT_PAGE,
     isMultipleMode: false
   }

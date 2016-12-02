@@ -33,7 +33,7 @@ import { getFrontPage, getPosts } from '../../api/feed';
  */
 export const selectSource = source => {
   const thunk = (dispatch, getState) => {
-    const { isMultipleMode } = getState().posts;
+    const { isMultipleMode } = getState().feed;
 
     if (isMultipleMode && typeof source === 'string') {
       const payload = 'You are in multiple mode, but tried to set posts source as you were in single mode';
@@ -53,7 +53,7 @@ export const selectSource = source => {
 
 export const toggleMultipleMode = () => {
   const thunk = (dispatch, getState) => {
-    const { isMultipleMode } = getState().posts;
+    const { isMultipleMode } = getState().feed;
     const type = isMultipleMode ? POSTS_MULTIPLE_MODE_OFF : POSTS_MULTIPLE_MODE_ON;
 
     return dispatch({ type });
