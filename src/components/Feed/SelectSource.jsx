@@ -31,9 +31,7 @@ class SelectSource extends Component {
     }
   }
 
-  toggleMultiple = (e) => {
-    const { isMultipleMode, source, feedQueue } = this.props;
-    console.log(isMultipleMode, source, feedQueue);
+  toggleMultiple () {
     this.props.toggleMultipleMode();
   }
 

@@ -9,26 +9,27 @@ class FeedControls extends Component {
   constructor(props) {
     super(props);
 
-    this.handleFetchPosts = this.handleFetchPosts.bind(this);
-    this.handleForceRefresh = this.handleForceRefresh.bind(this);
-  }
+    const { isMultipleMode, source } = this.props;
 
-  componentDidMount() {
-    this.handleFetchPosts()
+    if (!isMultipleMode && source) {
+      this.fetchThenRender(source);
+    }
+
+    this.handleForceRefresh = this.handleForceRefresh.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     const { source: nextSource, isMultipleMode: willBeMultipleMode } = nextProps;
 
     if (!willBeMultipleMode && nextSource !== this.props.source) {
-      return this.props.fetchPostsIfNeeded(nextSource);
+      this.fetchThenRender(nextSource);
     }
     // TODO: add conditions to detect change when in multiple mode (source is array)
   }
 
-  handleFetchPosts() {
-    const { source } = this.props;
-    return this.props.fetchPostsIfNeeded(source);
+  fetchThenRender(source) {
+    return this.props.fetchPostsIfNeeded(source)
+      .then(() => this.props.replaceFeedItems());
   }
 
   handleForceRefresh() {
@@ -49,17 +50,17 @@ class FeedControls extends Component {
     } else {
       const { source } = this.props;
       this.props.forceRefresh(source);
-      return this.props.fetchPostsIfNeeded(source);
+      return this.props.fetchAndRender(source);
     }
   }
 
   renderHeader() {
-    const { source, isMultipleMode, feedQueue } = this.props;
+    const { source, isMultipleMode } = this.props;
 
     let content;
 
     if (isMultipleMode) {
-      content = feedQueue.join(', ');
+      content = source.join(', ');
     } else {
       content = source;
     }

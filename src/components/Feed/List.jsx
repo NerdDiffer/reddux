@@ -35,22 +35,9 @@ class Feed extends Component {
   }
 }
 
-const mapStateToProps = ({ posts, feed, lists }) => {
-  const { source, isMultipleMode } = feed;
-
-  let items;
-
-  if (isMultipleMode) {
-    items = feed.items;
-  } else {
-    const stateAtSource = posts[source] || { items: [] };
-    items = stateAtSource.items;
-  }
-
-  return {
-    source,
-    items
-  };
+const mapStateToProps = ({ feed }) => {
+  const { items } = feed;
+  return { items };
 };
 
 const ConnectedFeed = connect(
