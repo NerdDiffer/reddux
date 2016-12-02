@@ -1,3 +1,4 @@
+import { combineReducers } from 'redux';
 import {
   SUBSCRIPTIONS_REPLACE_ALL,
   SUBSCRIPTIONS_ADD,
@@ -68,36 +69,10 @@ const FeedQueueReducer = (prevState = [], action) => {
   }
 };
 
-const getFallbackState = () => ({
-  subscriptions: {},
-  popularSubreddits: [],
-  feedQueue: []
-});
-
-const ListsReducer = (prevState = getFallbackState(), action) => {
+const PopularSubredditsReducer = (prevState = [], action) => {
   switch(action.type) {
-    case SUBSCRIPTIONS_REPLACE_ALL:
-    case SUBSCRIPTIONS_ADD:
-    case SUBSCRIPTIONS_REM: {
-      return {
-        ...prevState,
-        subscriptions: SubscriptionsReducer(prevState.subscriptions, action)
-      };
-    }
-    case LISTS_FEED_QUEUE_ADD:
-    case LISTS_FEED_QUEUE_REM:
-    case LISTS_FEED_QUEUE: {
-      return {
-        ...prevState,
-        feedQueue: FeedQueueReducer(prevState.feedQueue, action)
-      };
-    }
     case LISTS_POPULAR_SUBREDDITS: {
-      return {
-        ...prevState,
-        // contrary to `subscriptions`, this key references an array of strings
-        popularSubreddits: action.payload
-      };
+      return action.payload
     }
     default: {
       return prevState;
@@ -105,4 +80,8 @@ const ListsReducer = (prevState = getFallbackState(), action) => {
   }
 };
 
-export default ListsReducer;
+export default combineReducers({
+  subscriptions: SubscriptionsReducer,
+  feedQueue: FeedQueueReducer,
+  popularSubreddits: PopularSubredditsReducer
+});
