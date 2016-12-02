@@ -21,11 +21,11 @@ export const selectSource = source => {
     if (isMultipleMode && typeof source === 'string') {
       const payload = 'You are in multiple mode, but tried to set posts source as you were in single mode';
       dispatch({ type: MSG_ERROR, payload });
-      Promise.reject(payload);
+      return Promise.reject(payload);
     } else if (!isMultipleMode && Array.isArray(source)) {
       const payload = 'You are in single mode, but tried to set posts source as you were in multiple mode';
       dispatch({ type: MSG_ERROR, payload });
-      Promise.reject(payload);
+      return Promise.reject(payload);
     } else {
       dispatch({ type: POSTS_SOURCE, source });
     }
@@ -62,25 +62,29 @@ export const replaceFeedItems = () => {
 
 export const toggleMultipleMode = () => {
   const thunk = (dispatch, getState) => {
+    const { isMultipleMode } = getState().feed;
+
+    if (!isMultipleMode) {
+      dispatch({ type: POSTS_MULTIPLE_MODE_ON });
+    } else {
+      dispatch({ type: POSTS_MULTIPLE_MODE_OFF });
+    }
+  };
+
+  return thunk;
+};
+
+export const convertSource = () => {
+  const thunk = (dispatch, getState) => {
     const { isMultipleMode, source } = getState().feed;
 
-    // by dispatching state-dependent action creators so close together, *might*
-    // have to deal with race conditions...
-    if (isMultipleMode) {
-      dispatch({ type: POSTS_MULTIPLE_MODE_OFF });
-
+    if (!isMultipleMode) {
       const newSource = source[0] || null;
-      // throws error if previous dispatch is not complete...
       dispatch(selectSource(newSource));
     } else {
-      dispatch({ type: POSTS_MULTIPLE_MODE_ON });
-
       const newSource = [source];
-      // throws error if previous dispatch is not complete...
       dispatch(selectSource(newSource));
     }
-
-    dispatch(replaceFeedItems());
   };
 
   return thunk;
