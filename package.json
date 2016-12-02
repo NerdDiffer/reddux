@@ -7,7 +7,10 @@
     "node": ">=6.4.0"
   },
   "scripts": {
-    "test": "ava tests/{state,components,utils,api}/{**,**/**}/*_test.js",
+    "test:src": "ava tests/{state,components,utils,api}/{**,**/**}/*_test.js",
+    "test:helpers": "ava tests/test-helpers/*_test.js",
+    "test:all": "npm run test:helpers && npm run test:src",
+    "test": "npm run test:src",
     "start": "node index.js",
     "clean": "rm -rf node_modules/ src/styles/dist/ public/build/",
     "build:styles": "cd src/styles/ && gulp build",
