@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Icon, Button, Form } from 'semantic-ui-react';
-import SelectSubreddit from './SelectSubreddit';
+import SelectSource from './SelectSource';
 import * as actions from '../../state/actions/posts';
 
 class FeedControls extends Component {
@@ -71,7 +71,7 @@ class FeedControls extends Component {
     return (
       <div className="feed controls">
         <Form.Group>
-          <SelectSubreddit />
+          <SelectSource />
           {this.renderHeader()}
         </Form.Group>
         <Form.Group>

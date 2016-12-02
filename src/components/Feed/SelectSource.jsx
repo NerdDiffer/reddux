@@ -5,17 +5,17 @@ import { Dropdown } from 'semantic-ui-react';
 import { selectSource, updateFeedQueue, toggleMultipleMode } from '../../state/actions/posts';
 import { handleGetMySubreddits } from '../../state/actions/subreddits';
 
-const buildDropdownOptions = mySubs => {
+const buildDropdownOptions = subscriptions => {
   const options = [];
 
-  for (const key in mySubs) {
+  for (const key in subscriptions) {
     options.push({ value: key, text: key });
   }
 
   return options;
 }
 
-class SelectSubreddit extends Component {
+class SelectSource extends Component {
   constructor(props) {
     super(props);
 
@@ -24,9 +24,9 @@ class SelectSubreddit extends Component {
   }
 
   componentDidMount() {
-    const { mySubs } = this.props;
+    const { subscriptions } = this.props;
 
-    if (!mySubs) {
+    if (!subscriptions) {
       this.props.handleGetMySubreddits();
     }
   }
@@ -50,12 +50,12 @@ class SelectSubreddit extends Component {
   }
 
   render() {
-    const { mySubs, source, feedQueue, isMultipleMode } = this.props;
+    const { subscriptions, source, feedQueue, isMultipleMode } = this.props;
 
-    if (!mySubs) {
+    if (!subscriptions) {
       return null;
     } else {
-      const options = buildDropdownOptions(mySubs);
+      const options = buildDropdownOptions(subscriptions);
 
       return (
         <div className="dropdown">
@@ -86,18 +86,21 @@ class SelectSubreddit extends Component {
   }
 }
 
-SelectSubreddit.propTypes = {
-  source: PropTypes.string,
-  mySubs: PropTypes.object,
+SelectSource.propTypes = {
+  source: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array
+  ]),
+  subscriptions: PropTypes.object,
   handleGetMySubreddits: PropTypes.func,
   selectSource: PropTypes.func
 };
 
 const mapStateToProps = ({ lists, feed }) => {
-  const { subscriptions: mySubs, feedQueue } = lists;
+  const { subscriptions, feedQueue } = lists;
   const { isMultipleMode, source } = feed;
 
-  return { mySubs, feedQueue, isMultipleMode, source };
+  return { subscriptions, feedQueue, isMultipleMode, source };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -107,9 +110,9 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   toggleMultipleMode
 }, dispatch);
 
-const ConnectedSelectSubreddit = connect(
+const ConnectedSelectSource = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SelectSubreddit);
+)(SelectSource);
 
-export default ConnectedSelectSubreddit;
+export default ConnectedSelectSource;
