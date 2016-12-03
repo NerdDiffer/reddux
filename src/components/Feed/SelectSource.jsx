@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Dropdown } from 'semantic-ui-react';
-import { selectSource, updateFeedQueue, toggleMultipleMode } from '../../state/actions/posts';
+import { selectSource, updateFeedQueue, toggleMultipleMode } from '../../state/actions/feed';
 import { handleGetMySubreddits } from '../../state/actions/subreddits';
 
 const buildDropdownOptions = subscriptions => {

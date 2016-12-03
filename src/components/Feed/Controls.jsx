@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Icon, Button, Form } from 'semantic-ui-react';
 import SelectSource from './SelectSource';
-import * as actions from '../../state/actions/posts';
+import * as postsActions from '../../state/actions/posts';
+import { fetchBulk, replaceFeedItems } from '../../state/actions/feed';
 
 class FeedControls extends Component {
   constructor(props) {
@@ -101,7 +102,9 @@ const mapStateToProps = ({ posts, feed, lists }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators({ ...actions }, dispatch);
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({ ...postsActions, fetchBulk, replaceFeedItems }, dispatch)
+);
 
 const ConnectedFeedControls = connect(
   mapStateToProps,
