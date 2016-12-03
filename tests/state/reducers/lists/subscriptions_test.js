@@ -17,13 +17,7 @@ test.beforeEach(t => {
   };
 });
 
-test('returns some default state', t => {
-  const actual = reducer(undefined, { type: '' });
-  const expected = { subscriptions: {}, feedQueue: [], popularSubreddits: [] };
-  t.deepEqual(actual, expected);
-});
-
-test('handles replacing all subscriptions', t => {
+test('handles SUBSCRIPTIONS_REPLACE_ALL', t => {
   const newSubscriptions = {
     foo: { name: 't123', url: '/r/foo' },
     bar: { name: 't456', url: '/r/bar' }
@@ -47,7 +41,7 @@ test('handles replacing all subscriptions', t => {
   t.deepEqual(actual, expected);
 });
 
-test('handles adding a subscription', t => {
+test('handles SUBSCRIPTIONS_ADD', t => {
   const action = {
     type: ActionTypes.SUBSCRIPTIONS_ADD,
     payload: { display_name: 'pics', name: 't5_2qh0u', url: '/r/pics' }
@@ -68,7 +62,7 @@ test('handles adding a subscription', t => {
   t.deepEqual(actual, expected);
 });
 
-test('handles removing a subscription', t => {
+test('handles SUBSCRIPTIONS_REM', t => {
   const action = {
     type: ActionTypes.SUBSCRIPTIONS_REM,
     payload: 'news'
