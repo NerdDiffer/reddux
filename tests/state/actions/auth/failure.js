@@ -2,7 +2,7 @@ import test from 'ava';
 import sinon from 'sinon';
 import reduxThunk from 'redux-thunk'
 import configureMockStore from 'redux-mock-store'
-import * as router from 'react-router';
+import '../stubBrowserHistory';
 import requireSrc from '../../proxyPaths';
 import { accessTokenStorage, refreshTokenStorage } from '../../../../src/utils/storage';
 
@@ -14,18 +14,9 @@ const mockStore = configureMockStore([reduxThunk]);
 let stubbed_accessTokenStorage;
 let stubbed_refreshTokenStorage;
 
-const originalBrowserHistory = router.browserHistory;
-
-test.beforeEach(t => {
-  // browserHistory is undefined outside of browser environment, sinon won't let
-  // you stub it. So, doing it manually.
-  router.browserHistory = { push: () => {} };
-});
-
 test.afterEach(t => {
   stubbed_accessTokenStorage.restore();
   stubbed_refreshTokenStorage.restore();
-  router.browserHistory = originalBrowserHistory;
 });
 
 test('handles authentication failure when user denies access', t => {
