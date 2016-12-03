@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Icon, Button, Form } from 'semantic-ui-react';
+import { Icon, Button, Form, Header } from 'semantic-ui-react';
 import SelectSource from './SelectSource';
 import * as postsActions from '../../state/actions/posts';
 import { fetchBulk, replaceFeedItems } from '../../state/actions/feed';
@@ -33,7 +33,9 @@ class FeedControls extends Component {
       .then(() => this.props.replaceFeedItems());
   }
 
-  handleForceRefresh() {
+  handleForceRefresh(e) {
+    e.preventDefault();
+
     const { isMultipleMode } = this.props;
 
     if (isMultipleMode) {
@@ -51,7 +53,7 @@ class FeedControls extends Component {
     } else {
       const { source } = this.props;
       this.props.forceRefresh(source);
-      return this.props.fetchAndRender(source);
+      this.fetchThenRender(source);
     }
   }
 
@@ -66,26 +68,23 @@ class FeedControls extends Component {
       content = source;
     }
 
-    return (<h3>{content}</h3>)
+    return (<Header as="h3">{content}</Header>)
   }
 
   render () {
     return (
-      <div className="feed controls">
-        <Form.Group>
+      <Form className="feed controls">
+        <Form.Group grouped>
           <SelectSource />
-          {this.renderHeader()}
+          <Form.Button content="Refresh Posts" onClick={this.handleForceRefresh} />
         </Form.Group>
-        <Form.Group>
-          <Button content="Refresh Posts" onClick={this.handleForceRefresh} />
-          <br />
-          <Icon
-            name="refresh"
-            size="large"
-            color="black"
-          />
-        </Form.Group>
-      </div>
+        <Icon
+          name="refresh"
+          size="large"
+          color="black"
+        />
+        {this.renderHeader()}
+      </Form>
     );
   }
 }

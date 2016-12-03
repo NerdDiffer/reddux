@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Dropdown } from 'semantic-ui-react';
+import { Form, Dropdown, Checkbox } from 'semantic-ui-react';
 import { selectSource, updateFeedQueue, toggleMultipleMode } from '../../state/actions/feed';
 import { handleGetMySubreddits } from '../../state/actions/subreddits';
 
@@ -55,29 +55,31 @@ class SelectSource extends Component {
     } else {
       const options = buildDropdownOptions(subscriptions);
 
+      const checkboxLabel = `Multiple Mode: ${isMultipleMode ? 'On' : 'Off'}`;
+
       return (
         <div className="dropdown">
-          {' '}
-          <label>
-            <input
-              type='checkbox'
+          <Form.Group grouped>
+            <Checkbox
               checked={isMultipleMode}
               onChange={this.toggleMultiple}
-              content="Multiple"
+              label={checkboxLabel}
             />
-          </label>
-          <Dropdown
-            text="Select Subreddit"
-            name="selectSourceDropdown"
-            search
-            multiple={isMultipleMode}
-            labeled
-            button
-            className="icon"
-            value={isMultipleMode ? feedQueue : source}
-            options={options}
-            onChange={this.handleChange}
-          />
+          </Form.Group>
+          <Form.Group grouped>
+            <Dropdown
+              text="Select Subreddit"
+              name="selectSourceDropdown"
+              search
+              multiple={isMultipleMode}
+              labeled
+              button
+              className="icon"
+              value={isMultipleMode ? feedQueue : source}
+              options={options}
+              onChange={this.handleChange}
+            />
+          </Form.Group>
         </div>
       );
     }

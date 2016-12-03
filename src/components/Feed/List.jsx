@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Message, Item } from 'semantic-ui-react';
+import { Message, Item, Divider } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import Post from './Post';
 import FeedControls from './Controls';
@@ -28,7 +28,7 @@ class Feed extends Component {
       <div className="posts">
         <h2>Feed</h2>
         <FeedControls />
-        <br />
+        <Divider />
         {this.renderChildren()}
       </div>
     );
