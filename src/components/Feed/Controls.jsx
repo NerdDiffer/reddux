@@ -78,11 +78,6 @@ class FeedControls extends Component {
           <SelectSource />
           <Form.Button content="Refresh Posts" onClick={this.handleForceRefresh} />
         </Form.Group>
-        <Icon
-          name="refresh"
-          size="large"
-          color="black"
-        />
         {this.renderHeader()}
       </Form>
     );
