@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Form, Dropdown, Checkbox } from 'semantic-ui-react';
-import { selectSource, updateFeedQueue, toggleMultipleMode } from '../../state/actions/feed';
+import * as feedActions from '../../state/actions/feed';
 import { handleGetMySubreddits } from '../../state/actions/subreddits';
 
 const buildDropdownOptions = subscriptions => {
@@ -32,7 +32,10 @@ class SelectSource extends Component {
   }
 
   toggleMultiple () {
-    this.props.toggleMultipleMode();
+    const { toggleMultipleMode, convertSource, replaceFeedItems } = this.props;
+    toggleMultipleMode();
+    convertSource();
+    replaceFeedItems();
   }
 
   handleChange(_ev, { value }) {
@@ -55,7 +58,19 @@ class SelectSource extends Component {
     } else {
       const options = buildDropdownOptions(subscriptions);
 
-      const checkboxLabel = `Multiple Mode: ${isMultipleMode ? 'On' : 'Off'}`;
+      let checkboxLabel;
+      let text;
+      let value;
+
+      if (isMultipleMode) {
+        checkboxLabel = 'Multiple Mode: On';
+        text = 'Subs';
+        value = feedQueue;
+      } else {
+        checkboxLabel = 'Multiple Mode: Off';
+        text = 'Sub';
+        value = source;
+      }
 
       return (
         <div className="dropdown">
@@ -68,14 +83,14 @@ class SelectSource extends Component {
           </Form.Group>
           <Form.Group grouped>
             <Dropdown
-              text="Select Subreddit"
+              text={text}
               name="selectSourceDropdown"
               search
               multiple={isMultipleMode}
               labeled
               button
               className="icon"
-              value={isMultipleMode ? feedQueue : source}
+              value={value}
               options={options}
               onChange={this.handleChange}
             />
@@ -105,9 +120,7 @@ const mapStateToProps = ({ lists, feed }) => {
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   handleGetMySubreddits,
-  selectSource,
-  updateFeedQueue,
-  toggleMultipleMode
+  ...feedActions
 }, dispatch);
 
 const ConnectedSelectSource = connect(
