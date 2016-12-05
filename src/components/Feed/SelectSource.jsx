@@ -27,7 +27,9 @@ class SelectSource extends Component {
   componentDidMount() {
     const { subscriptions } = this.props;
 
-    if (!subscriptions) {
+    // TODO: use a "lastUpdated" timestamp or boolean flag in state, so you
+    // don't have to run this code every time.
+    if (Object.keys(subscriptions).length < 1) {
       this.props.handleGetMySubreddits();
     }
   }

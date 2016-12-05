@@ -22,6 +22,8 @@ class Subreddits extends Component {
   componentDidMount() {
     const { subscriptions, popularSubreddits } = this.props;
 
+    // TODO: use a "lastUpdated" timestamp or boolean flag in state, so you
+    // don't have to run this code every time.
     if (Object.keys(subscriptions).length < 1 || Object.keys(popularSubreddits).length < 1) {
       this.fetchSubs();
     }
