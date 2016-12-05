@@ -14,19 +14,13 @@ const SubscriptionsReducer = (prevState = {}, action) => {
   switch(action.type) {
     case SUBSCRIPTIONS_REPLACE_ALL: {
       return {
-          // TODO: figure out how to get the front page into the Dropdown menu
-          // of Feed/SelectSubreddit
-          // [FRONT_PAGE]: { name: FRONT_PAGE, display_name: FRONT_PAGE },
-          ...action.payload
+        ...action.payload
       };
     }
     case SUBSCRIPTIONS_ADD: {
       const { url, name, display_name } = action.payload;
 
       const newSubscribedTo = {
-        // TODO: figure out how to get the front page into the Dropdown menu
-        // of Feed/SelectSubreddit
-        // [FRONT_PAGE]: { name: FRONT_PAGE, display_name: FRONT_PAGE },
         ...prevState,
         [display_name]: { name, url }
       };

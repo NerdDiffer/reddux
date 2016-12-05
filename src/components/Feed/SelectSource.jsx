@@ -2,11 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Form, Dropdown, Checkbox } from 'semantic-ui-react';
+import { FRONT_PAGE } from '../../state/constants';
 import * as feedActions from '../../state/actions/feed';
 import { handleGetMySubreddits } from '../../state/actions/subreddits';
 
 const buildDropdownOptions = subscriptions => {
-  const options = [];
+  const options = [{ value: FRONT_PAGE, text: FRONT_PAGE }];
 
   for (const key in subscriptions) {
     options.push({ value: key, text: key });
