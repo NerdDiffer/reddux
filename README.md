@@ -19,7 +19,6 @@ Here are the features that use account permissions, by their OAuth scope:
 * `mysubreddits`: fetch a list of your subscriptions
 * `subscribe`: manage your subscriptions
 
-
 ## Installations
 
 #### Application dependencies
@@ -73,3 +72,14 @@ To locally test a production build:
   * `npm run heroku-postbuild`
 * Start app:
   * `NODE_ENV=production npm start`
+
+## Tests
+
+Run tests in selected application parts, or all of them:
+
+* `src/` only
+  * `npm test`
+* custom test utilities
+  * `npm test:helpers`
+* everything
+  * `npm test:all`
