@@ -1,7 +1,7 @@
 {
   "name": "reddux",
   "version": "0.0.0",
-  "description": "A reddit reader",
+  "description": "A content reader for reddit",
   "main": "index.js",
   "engines": {
     "node": ">=6.4.0"
@@ -12,8 +12,8 @@
     "test:all": "npm run test:helpers && npm run test:src",
     "test": "npm run test:src",
     "start": "node index.js",
-    "clean": "rm -rf node_modules/ src/styles/dist/ public/build/",
-    "build:styles": "cd src/styles/ && gulp build",
+    "clean": "rm -rf node_modules/ semantic-ui/dist/ public/build/",
+    "build:styles": "cd semantic-ui && gulp build",
     "build:prod": "NODE_ENV=production node config/build.production.js",
     "heroku-postbuild": "npm run build:styles && npm run build:prod"
   },
@@ -23,7 +23,6 @@
   "devDependencies": {
     "ava": "^0.17.0",
     "cz-conventional-changelog": "^1.2.0",
-    "enzyme": "^2.6.0",
     "fetch-mock": "^5.5.0",
     "redux-mock-store": "^1.2.1",
     "sinon": "^1.17.6",
@@ -46,11 +45,9 @@
     "react-redux": "^4.4.5",
     "react-router": "^3.0.0",
     "redux": "^3.6.0",
-    "redux-form": "^6.2.0",
     "redux-thunk": "^2.1.0",
     "semantic-ui": "^2.2.6",
     "semantic-ui-react": "^0.60.4",
-    "snoowrap": "^1.11.2",
     "webpack": "^1.13.3"
   },
   "private": true,
@@ -72,7 +69,7 @@
       "tests/**/*_test.js"
     ],
     "source": [
-      "!src/styles/**/*",
+      "!semantic-ui/**/*",
       "src/*.{js,jsx}"
     ],
     "concurrency": 5,

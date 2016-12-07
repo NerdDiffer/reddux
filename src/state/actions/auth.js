@@ -85,7 +85,7 @@ const handleAuthAccept = (dispatch, code) => {
     .then(() => {
       dispatch({
         type: MSG_SUCCESS,
-        payload: { header: 'Success!', content: 'Enjoy Reddit' }
+        payload: { header: 'Success!', content: 'Enjoy' }
       });
       browserHistory.push('/feed');
     })

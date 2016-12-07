@@ -7,7 +7,7 @@ const Details = () => (
       <Card.Content>
         <Card.Header>What is this?</Card.Header>
         <Card.Description>
-          A Reddit API client. Browse posts from your front page and subscriptions.
+          An API client for Reddit. Browse posts from your front page and subscriptions.
         </Card.Description>
       </Card.Content>
     </Card>
@@ -33,8 +33,8 @@ const Details = () => (
       <Card.Content>
         <Card.Header>What does "Reddux" mean?</Card.Header>
         <Card.Description>
-          It's a play on words. One, you get to use Reddit. Two, it makes use
-          of <a href="http://redux.js.org" target="_blank">Redux</a>, for
+          It's a play on words. One, it's a content reader for Reddit.
+          Two, it makes use of <a href="http://redux.js.org" target="_blank">Redux</a>, for
           managing application state.
         </Card.Description>
       </Card.Content>

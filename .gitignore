@@ -44,7 +44,7 @@ Session.vim
 
 # Builds
 public/build/
-src/styles/dist/
+semantic-ui/dist/
 
 # Application files
 .env*

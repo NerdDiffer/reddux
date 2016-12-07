@@ -5,7 +5,7 @@ const PATHS = {
   SRC:         ROOT + '/src',
   PUBLIC:      ROOT + '/public',
   BUILD:       ROOT + '/public/build',
-  SEMANTIC_UI: ROOT + '/src/styles/dist'
+  SEMANTIC_UI: ROOT + '/semantic-ui/dist'
 };
 
 module.exports = PATHS;

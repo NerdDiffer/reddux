@@ -5,7 +5,7 @@ import About from './About';
 
 const Welcome = () => (
   <div className="welcome">
-    <h4>A simple Reddit browser</h4>
+    <h4>A simple browser for Reddit</h4>
     <AuthUrl content="Get Started" color="orange" />
     <Divider section />
     <About showHeader={false} />

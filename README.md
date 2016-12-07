@@ -1,18 +1,18 @@
 # Reddux
 
-A Reddit content reader. Built with React, Redux and Semantic-UI.
+A content reader for Reddit. Built with React, Redux and Semantic-UI.
 See a [live demo](https://reddux.herokuapp.com/).
 
 ## OAuth
 
-You'll need to register a developer app with Reddit. [Read about that here](https://github.com/reddit/reddit/wiki/OAuth2#getting-started).
+You'll need to register a developer app. [Read about that here](https://github.com/reddit/reddit/wiki/OAuth2#getting-started).
 Choose 'web app' for your app type.
 
  Using the template at `config/env_template`, save your credentials in `.env`.
 
 #### Scope explanations
 
-As a user, the app will ask for access to your reddit account.
+As a user, the app will ask for access to your account.
 Here are the features that use account permissions, by their OAuth scope:
 
 * `read`: get the most popular subreddits
